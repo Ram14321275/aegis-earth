@@ -26,6 +26,7 @@ In progress.
 - Added required documentation files.
 - Added dark mission-control UI foundation.
 - Verified frontend build, frontend lint, backend tests, API health, and browser interaction.
+- Added approved frontend, backend, and decision-record architecture folders.
 
 ### Remaining
 

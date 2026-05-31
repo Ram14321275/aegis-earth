@@ -5,9 +5,8 @@
 Aegis Earth is organized around clean service boundaries so disaster intelligence can grow without coupling UI, API, model, cache, alert, and visualization concerns.
 
 ```text
-apps/
-  web/ React operator console
-  api/ FastAPI application
+frontend/ React operator console
+backend/  FastAPI application
 services/
   disaster-engine/
   model-interface/
@@ -15,7 +14,19 @@ services/
   alert-engine/
   visualization/
   geospatial/
+docs/
+  decisions/
 ```
+
+## Repository Workspaces
+
+- `frontend/src/features`: MVP feature modules for location search, flood intelligence, wildfire intelligence, map evidence, alerts, and explainability.
+- `frontend/src/store`: client-side state management for MVP workflows.
+- `backend/app/api/v1`: versioned FastAPI route ownership.
+- `backend/app/validators`: request and domain validation.
+- `backend/app/middleware`: request/response middleware.
+- `backend/app/tests`: backend verification.
+- `docs/decisions`: approved architecture decision records.
 
 ## Frontend
 
@@ -55,4 +66,3 @@ The FastAPI backend exposes versioned API routes under `/api/v1`. Request flow:
 - Request key normalization by rounded coordinates.
 - Lazy frontend map rendering.
 - Background scheduler reserved for provider ingestion and cache warming.
-

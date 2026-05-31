@@ -9,6 +9,8 @@
 - Updated `scripts/push.sh` to review status and stage only approved project directories before commit and push
 - Sprint 1 Checkpoint 2 frontend workspace initialized under `frontend/`
 - Added React, Vite, TypeScript, Tailwind CSS, shadcn/ui-style components, Framer Motion, and Leaflet foundation
+- Refactored repository structure with approved `backend/app`, `frontend/src/features`, `frontend/src/store`, and `docs/decisions` folders
+- Documented repository architecture decision in `docs/decisions/0001-repository-architecture.md`
 
 ## Issues
 -

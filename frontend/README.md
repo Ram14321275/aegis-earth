@@ -12,6 +12,21 @@ Official Sprint 1 frontend workspace for Aegis Earth.
 - Framer Motion
 - Leaflet
 
+## Structure
+
+```text
+frontend/src/
+  assets/
+  components/
+  features/
+  hooks/
+  pages/
+  routes/
+  services/
+  store/
+  types/
+```
+
 ## Commands
 
 ```bash
@@ -19,4 +34,3 @@ npm install
 npm run build
 npm run dev
 ```
-
