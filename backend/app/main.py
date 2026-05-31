@@ -11,6 +11,7 @@ from app.core.exceptions import global_exception_handler, validation_exception_h
 from app.core.logging import configure_logging, get_logger
 from app.core.security import build_security_headers
 from app.middleware.request_context import RequestContextMiddleware
+from app.observability.telemetry import TelemetryMiddleware
 
 settings = get_settings()
 logger = get_logger(__name__)
@@ -46,6 +47,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_middleware(RequestContextMiddleware, security_headers=build_security_headers())
+app.add_middleware(TelemetryMiddleware)
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, global_exception_handler)

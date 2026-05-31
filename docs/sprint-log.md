@@ -39,6 +39,7 @@ In progress.
 - Designed provider abstraction layer defining strict async contracts for pulling imagery, metadata, and health checks across satellite API variants.
 - Implemented Earth Observation Domain Layer defining hazard models and deterministic risk scoring engine decoupled from API boundaries.
 - Implemented Alert Intelligence Layer computing deterministic situational alerts directly mapped to domain risk scoring.
+- Implemented Observability Foundation providing metrics and health tracking endpoints decoupled from external Prometheus/Grafana stacks.
 
 ### Remaining
 

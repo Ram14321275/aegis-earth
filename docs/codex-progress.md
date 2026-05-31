@@ -60,6 +60,12 @@
 - Created `AlertRules` implementing deterministic evaluation thresholds (e.g. 0-25 -> INFO, >75 -> CRITICAL).
 - Built `AlertEngine` ingesting hazard scoring vectors to construct complete situational awareness alerts.
 - Intersected the `AlertEngine` with the `AnalysisService` pipeline to transparently yield `AlertResponse` payloads within `AnalysisResult`.
+- Sprint 1 Checkpoint 12 completed
+- Created the core Observability Foundation (`backend/app/observability/`) tracking health and telemetry without external dependencies.
+- Authored a thread-safe singleton `MetricsStore` tracking granular operational behavior (e.g., Cache hit-rates, API latency, Alert levels).
+- Implemented `TelemetryMiddleware` inside the FastAPI `main.py` intercepting API lifecycle data.
+- Built a unified `HealthAggregator` synthesizing readiness of Cache, Database, Provider, and API boundaries.
+- Defined explicit REST endpoints `GET /api/v1/system/metrics` and `GET /api/v1/system/health` under strongly-typed schemas.
 
 ## Issues
 -

@@ -4,6 +4,7 @@ from typing import Any, Optional
 from pydantic import BaseModel
 
 from app.core.logging import get_logger
+from app.observability.metrics import metrics_store
 
 logger = get_logger(__name__)
 
@@ -45,15 +46,18 @@ class CacheService:
         entry = self._cache.get(key)
         if not entry:
             self._misses += 1
+            metrics_store.record_cache_access(hit=False)
             return None
 
         if self._now() > entry.expires_at:
             # Expired
             self.invalidate(key)
             self._misses += 1
+            metrics_store.record_cache_access(hit=False)
             return None
 
         self._hits += 1
+        metrics_store.record_cache_access(hit=True)
         return entry.value
 
     def set(

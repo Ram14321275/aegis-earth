@@ -34,12 +34,16 @@ class AnalysisService:
         from app.domain.models.hazard import HazardType
         from app.domain.scoring.engine import RiskScoringEngine
         from app.domain.alerts.engine import AlertEngine
+        from app.observability.metrics import metrics_store
         import uuid
-        
+
         hazard = HazardType.FLOOD
         score = RiskScoringEngine.calculate_score(hazard)
         domain_alert = AlertEngine.generate_alert(hazard, score)
-        
+
+        metrics_store.record_analysis(hazard.value, score)
+        metrics_store.record_alert(domain_alert.level.value)
+
         risk = RiskAssessment(
             source=["Aegis Mock Engine"],
             confidence=0.85,
