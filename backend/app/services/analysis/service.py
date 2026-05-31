@@ -31,13 +31,19 @@ class AnalysisService:
         Mock implementation of the disaster analysis engine.
         Returns a mocked AnalysisResult.
         """
+        from app.domain.models.hazard import HazardType
+        from app.domain.scoring.engine import RiskScoringEngine
+        
+        hazard = HazardType.FLOOD
+        score = RiskScoringEngine.calculate_score(hazard)
+        
         risk = RiskAssessment(
             source=["Aegis Mock Engine"],
             confidence=0.85,
             severity=SeverityEnum.MEDIUM,
             analysis_version="1.0.0-mock",
-            hazard_type=HazardTypeEnum.FLOOD,
-            score=65.0,
+            hazard_type=HazardTypeEnum(hazard.value),
+            score=score,
             drivers=["High precipitation forecast", "Low elevation"],
         )
 

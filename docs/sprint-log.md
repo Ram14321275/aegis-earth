@@ -37,6 +37,7 @@ In progress.
 - Implemented cache architecture foundation with versioned keys and 24-hour TTL in-memory storage.
 - Implemented PostgreSQL persistence foundation with SQLAlchemy 2.0, Alembic migrations, and the strict Repository Pattern.
 - Designed provider abstraction layer defining strict async contracts for pulling imagery, metadata, and health checks across satellite API variants.
+- Implemented Earth Observation Domain Layer defining hazard models and deterministic risk scoring engine decoupled from API boundaries.
 
 ### Remaining
 

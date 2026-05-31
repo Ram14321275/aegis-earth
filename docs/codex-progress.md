@@ -49,6 +49,11 @@
 - Created strongly-typed `ImageryResponse`, `MetadataResponse`, and `HealthResponse` models shielding `AnalysisService` from vendor structures.
 - Structured a factory-based `ProviderManager` dynamically loading providers off environmental `AEGIS_ACTIVE_PROVIDER` flags.
 - Developed `MockProvider`, `GEEProvider`, and `SentinelProvider` classes, confirming dynamic DI substitution capability.
+- Sprint 1 Checkpoint 10 completed
+- Implemented the Earth Observation Domain layer (`backend/app/domain/`), introducing isolated structures for Hazards, Scoring, and core Models.
+- Created `HazardType` representing the standard array of Earth observation threats (e.g. `FLOOD`, `WILDFIRE`, `VEGETATION_LOSS`).
+- Engineered a deterministic `RiskScoringEngine` generating risk scores detached from AI/ML, mapped strictly off the Hazard domain boundaries.
+- Refactored `AnalysisService` and the `schemas` layer to consume the new decoupled `HazardType` definitions.
 
 ## Issues
 -

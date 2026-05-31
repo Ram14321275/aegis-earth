@@ -93,6 +93,7 @@ Future disaster intelligence request flow:
 - `analysis`: high-level disaster analysis orchestration.
 - `disaster-engine`: flood and wildfire scoring, risk assessment, explainable drivers.
 - `model-interface`: stable contracts for future model replacement.
+- `domain`: Earth observation domain model standardizing hazards and risk scoring logic independent of specific models or APIs.
 - `geospatial`: boundary for Earth Engine / standard mapping APIs.
 - `db`: pure persistence layer isolated from business logic using the Repository Pattern.
 - `providers`: abstraction layer standardizing inputs from external satellite networks (Earth Engine, Sentinel).

@@ -21,6 +21,9 @@ class HazardTypeEnum(str, Enum):
     CYCLONE = "cyclone"
     LANDSLIDE = "landslide"
     DROUGHT = "drought"
+    VEGETATION_LOSS = "vegetation_loss"
+    URBAN_EXPANSION = "urban_expansion"
+    UNKNOWN = "unknown"
 
 
 def get_utc_now() -> datetime:
