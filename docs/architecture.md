@@ -93,7 +93,8 @@ Future disaster intelligence request flow:
 - `analysis`: high-level disaster analysis orchestration.
 - `disaster-engine`: flood and wildfire scoring, risk assessment, explainable drivers.
 - `model-interface`: stable contracts for future model replacement.
-- `cache`: cache-first strategy and request deduplication primitives.
+- `geospatial`: boundary for Earth Engine / standard mapping APIs.
+- `db`: pure persistence layer isolated from business logic using the Repository Pattern.
 - `alert-engine`: alert generation from hazard signals.
 - `visualization`: map, heat map, and difference map layer descriptors.
 - `geospatial`: coordinate resolution and geospatial normalization.

@@ -39,6 +39,11 @@
 - Created `CacheKeyBuilder` ensuring all coordinates are uniformly rounded to 4 decimal places.
 - Integrated fail-safe caching directly into the `SearchService` orchestration layer.
 - Populated `cache_hit: bool` tracking on `AnalysisResult` for frontend observability.
+- Sprint 1 Checkpoint 8 completed
+- Configured PostgreSQL integration with SQLAlchemy 2.0 `DeclarativeBase` and `asyncpg` bindings.
+- Built automated database migrations using Alembic offline/async configurations.
+- Abstracted all SQL into `BaseRepository`, `LocationRepository`, and `AnalysisRepository` isolating core models.
+- Verified ORM and mocking paradigms using `anyio` Pytest execution.
 
 ## Issues
 -

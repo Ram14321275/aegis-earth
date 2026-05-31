@@ -20,6 +20,10 @@ class Settings(BaseSettings):
         ],
         alias="AEGIS_CORS_ORIGINS",
     )
+    database_url: str = Field(
+        default="postgresql+asyncpg://postgres:postgres@localhost:5432/aegis_earth",
+        alias="DATABASE_URL",
+    )
 
 
 @lru_cache
