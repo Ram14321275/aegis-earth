@@ -7,11 +7,14 @@ interface AlertFeedProps {
   isLoading: boolean;
 }
 
-const severityConfig = {
+const severityConfig: Record<string, { icon: any, colorClass: string, borderClass: string, bgClass: string }> = {
   INFO: { icon: Info, colorClass: "text-primary", borderClass: "border-primary/30", bgClass: "bg-primary/5" },
   WATCH: { icon: AlertOctagon, colorClass: "text-gray-300", borderClass: "border-gray-700", bgClass: "bg-gray-800/20" },
   WARNING: { icon: AlertTriangle, colorClass: "text-warning", borderClass: "border-warning/30", bgClass: "bg-warning/5" },
-  CRITICAL: { icon: ShieldAlert, colorClass: "text-danger", borderClass: "border-danger/30", bgClass: "bg-danger/10" }
+  CRITICAL: { icon: ShieldAlert, colorClass: "text-danger", borderClass: "border-danger/30", bgClass: "bg-danger/10" },
+  LOW: { icon: Info, colorClass: "text-primary", borderClass: "border-primary/30", bgClass: "bg-primary/5" },
+  MEDIUM: { icon: AlertTriangle, colorClass: "text-warning", borderClass: "border-warning/30", bgClass: "bg-warning/5" },
+  HIGH: { icon: ShieldAlert, colorClass: "text-danger", borderClass: "border-danger/30", bgClass: "bg-danger/10" },
 };
 
 export function AlertFeed({ alerts, isLoading }: AlertFeedProps) {

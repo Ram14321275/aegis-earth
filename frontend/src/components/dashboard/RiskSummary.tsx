@@ -6,9 +6,10 @@ interface RiskSummaryProps {
   isLoading: boolean;
 }
 
-const levelColors = {
+const levelColors: Record<string, string> = {
   LOW: "text-success border-success/30 bg-success/10",
   MODERATE: "text-warning border-warning/30 bg-warning/10",
+  MEDIUM: "text-warning border-warning/30 bg-warning/10",
   HIGH: "text-danger border-danger/30 bg-danger/10",
   CRITICAL: "text-danger border-danger/50 bg-danger/20 font-bold"
 };
