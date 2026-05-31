@@ -12,9 +12,11 @@ def test_metrics_store():
     metrics_store.record_cache_access(False)
     metrics_store.record_analysis("flood", 85.0)
     metrics_store.record_alerts_generated("CRITICAL")
+    metrics_store.record_visualization_request()
     
     metrics = metrics_store.get_metrics()
     assert metrics.alerts.alerts_critical_total >= 1
+    assert metrics.visualizations.requests_total >= 1
     
     assert metrics.api.total_requests >= 2
     assert metrics.api.successful_requests >= 1

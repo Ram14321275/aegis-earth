@@ -7,6 +7,7 @@ from app.schemas.observability import (
     APIMetrics,
     CacheMetrics,
     SystemMetricsResponse,
+    VisualizationMetrics,
 )
 
 
@@ -42,6 +43,10 @@ class MetricsStore:
         self.alerts_high_total = 0
         self.alerts_critical_total = 0
         self.alerts_generation_ms = 0.0
+
+        # Visualizations
+        self.visualization_requests_total = 0
+        self.visualization_generation_ms = 0.0
 
         self._metrics_lock = threading.Lock()
 
@@ -80,6 +85,14 @@ class MetricsStore:
     def record_alerts_duration(self, latency_ms: float):
         with self._metrics_lock:
             self.alerts_generation_ms += latency_ms
+
+    def record_visualization_request(self):
+        with self._metrics_lock:
+            self.visualization_requests_total += 1
+
+    def record_visualization_duration(self, duration_ms: float):
+        with self._metrics_lock:
+            self.visualization_generation_ms += duration_ms
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
@@ -120,6 +133,10 @@ class MetricsStore:
                     alerts_high_total=self.alerts_high_total,
                     alerts_critical_total=self.alerts_critical_total,
                     alerts_generation_ms=self.alerts_generation_ms,
+                ),
+                visualizations=VisualizationMetrics(
+                    requests_total=self.visualization_requests_total,
+                    generation_ms=self.visualization_generation_ms,
                 ),
             )
 

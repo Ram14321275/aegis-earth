@@ -29,11 +29,17 @@ class AlertMetrics(BaseModel):
     alerts_generation_ms: float
 
 
+class VisualizationMetrics(BaseModel):
+    requests_total: int
+    generation_ms: float
+
+
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
     cache: CacheMetrics
     analysis: AnalysisMetrics
     alerts: AlertMetrics
+    visualizations: VisualizationMetrics
 
 
 class ComponentHealth(BaseModel):

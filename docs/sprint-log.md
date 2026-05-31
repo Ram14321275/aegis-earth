@@ -43,6 +43,7 @@ In progress.
 - Re-architected intelligent caching foundation (`core/cache`) shifting to fully async boundaries with request deduplication and category isolation.
 - Built Risk Assessment Foundation (`core/risk`) to dynamically calculate confidence-adjusted scores and explicit risk level categorizations.
 - Built Alert Engine Foundation (`core/alerts`) mapping abstract risk factors into standardized actionable warning generation frameworks.
+- Built Visualization Data Layer (`core/visualization`) mapping intelligence coordinates directly into standardized GeoJSON formats and bounding polygons.
 
 ### Remaining
 

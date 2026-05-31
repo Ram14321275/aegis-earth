@@ -79,6 +79,19 @@ class HealthAggregator:
             )
             overall_status = "degraded"
 
+        # 6. Visualization Engine Health
+        try:
+            from app.core.visualization.service import visualization_service
+            vis_status = visualization_service.get_status()
+            components["visualizations"] = ComponentHealth(
+                status=vis_status["status"]
+            )
+        except Exception as e:
+            components["visualizations"] = ComponentHealth(
+                status="unhealthy", details={"error": str(e)}
+            )
+            overall_status = "degraded"
+
         return SystemHealthResponse(
             status=overall_status, components=components
         )
