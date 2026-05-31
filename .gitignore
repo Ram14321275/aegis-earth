@@ -1,10 +1,18 @@
-node_modules/
-dist/
-build/
-.vite/
-*.tsbuildinfo
+# Environment
+.env
+.env.*
+!.env.example
 
+# Secrets
+*.pem
+*.key
+*.crt
+credentials.json
+service-account.json
+
+# Python
 __pycache__/
+*.pyc
 *.py[cod]
 .pytest_cache/
 .mypy_cache/
@@ -12,10 +20,22 @@ __pycache__/
 .venv/
 venv/
 
-.env
-.env.*
-!.env.example
+# Node
+node_modules/
 
+# Logs
 *.log
+
+# OS
 .DS_Store
 Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Build
+dist/
+build/
+.vite/
+*.tsbuildinfo

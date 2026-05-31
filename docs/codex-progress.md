@@ -3,6 +3,12 @@
 ## Completed
 - GitHub repository connected
 - Repository structure initialized
+- Repository ignore policy updated for environment files, secrets, IDE folders, Python, Node, logs, OS files, and build outputs
+- Security baseline audit completed
+- Created MVP security rules in `docs/security-baseline.md`
+- Updated `scripts/push.sh` to review status and stage only approved project directories before commit and push
+- Sprint 1 Checkpoint 2 frontend workspace initialized under `frontend/`
+- Added React, Vite, TypeScript, Tailwind CSS, shadcn/ui-style components, Framer Motion, and Leaflet foundation
 
 ## Issues
 -
