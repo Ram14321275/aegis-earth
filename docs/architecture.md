@@ -96,6 +96,7 @@ Future disaster intelligence request flow:
 - `domain`: Earth observation domain model standardizing hazards and risk scoring logic independent of specific models or APIs.
 - `core/alerts`: Alert intelligence layer generating deterministic situational alerts driven by risk categorization.
 - `core/visualization`: Visualization data layer dynamically compiling overlays, heatmaps, and GeoJSON structures for Leaflet integration.
+- `db`: Database foundation handling async operations with explicit Repository patterns supporting Location, Analysis, Risk, Alerts, and Audit logs.
 - `core`: Infrastructure code including configuration, logging, and security.
 - `core/cache`: Unified caching foundation handling request deduplication, TTL evictions, and metrics synchronization.
 - `core/risk`: Standardized risk engine scoring hazards dynamically through threshold-driven rule configurations.

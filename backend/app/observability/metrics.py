@@ -6,6 +6,7 @@ from app.schemas.observability import (
     AnalysisMetrics,
     APIMetrics,
     CacheMetrics,
+    DatabaseMetrics,
     SystemMetricsResponse,
     VisualizationMetrics,
 )
@@ -47,6 +48,11 @@ class MetricsStore:
         # Visualizations
         self.visualization_requests_total = 0
         self.visualization_generation_ms = 0.0
+
+        # Database
+        self.db_queries_total = 0
+        self.db_query_duration_ms = 0.0
+        self.db_failures_total = 0
 
         self._metrics_lock = threading.Lock()
 
@@ -94,6 +100,14 @@ class MetricsStore:
         with self._metrics_lock:
             self.visualization_generation_ms += duration_ms
 
+    def record_db_query(self, duration_ms: float, success: bool = True):
+        with self._metrics_lock:
+            self.db_queries_total += 1
+            if success:
+                self.db_query_duration_ms += duration_ms
+            else:
+                self.db_failures_total += 1
+
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
             avg_latency = (
@@ -138,6 +152,11 @@ class MetricsStore:
                     requests_total=self.visualization_requests_total,
                     generation_ms=self.visualization_generation_ms,
                 ),
+                database=DatabaseMetrics(
+                    queries_total=self.db_queries_total,
+                    query_duration_ms=self.db_query_duration_ms,
+                    failures_total=self.db_failures_total,
+                )
             )
 
 

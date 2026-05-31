@@ -92,6 +92,21 @@ class HealthAggregator:
             )
             overall_status = "degraded"
 
+        # 7. Database Engine Health
+        try:
+            from app.db.session import async_session_maker
+            from sqlalchemy import text
+            async with async_session_maker() as session:
+                await session.execute(text("SELECT 1"))
+            components["database"] = ComponentHealth(
+                status="healthy"
+            )
+        except Exception as e:
+            components["database"] = ComponentHealth(
+                status="unhealthy", details={"error": str(e)}
+            )
+            overall_status = "degraded"
+
         return SystemHealthResponse(
             status=overall_status, components=components
         )

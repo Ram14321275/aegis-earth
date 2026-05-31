@@ -34,12 +34,19 @@ class VisualizationMetrics(BaseModel):
     generation_ms: float
 
 
+class DatabaseMetrics(BaseModel):
+    queries_total: int
+    query_duration_ms: float
+    failures_total: int
+
+
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
     cache: CacheMetrics
     analysis: AnalysisMetrics
     alerts: AlertMetrics
     visualizations: VisualizationMetrics
+    database: DatabaseMetrics
 
 
 class ComponentHealth(BaseModel):
