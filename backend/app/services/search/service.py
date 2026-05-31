@@ -5,6 +5,7 @@ from app.schemas.geospatial import Coordinates
 from app.schemas.intelligence import AnalysisResult
 from app.schemas.search import SearchRequest
 from app.services.analysis.service import AnalysisService, get_analysis_service
+from app.services.cache.service import CacheKeyBuilder, CacheService, get_cache_service
 from app.services.geospatial import GeospatialService, get_geospatial_service
 
 logger = get_logger(__name__)
@@ -15,9 +16,11 @@ class SearchService:
         self,
         geospatial_service: GeospatialService,
         analysis_service: AnalysisService,
+        cache_service: CacheService,
     ):
         self.geospatial_service = geospatial_service
         self.analysis_service = analysis_service
+        self.cache_service = cache_service
 
     async def search(self, request: SearchRequest) -> AnalysisResult:
         logger.info(
@@ -28,6 +31,29 @@ class SearchService:
                 "lon": request.longitude,
             },
         )
+
+        # 1. Build cache key
+        if request.query:
+            cache_key = CacheKeyBuilder.location(request.query)
+        else:
+            cache_key = CacheKeyBuilder.coordinates(
+                request.latitude, request.longitude  # type: ignore
+            )
+
+        # 2. Cache Lookup
+        try:
+            cached_result = self.cache_service.get(cache_key)
+            if cached_result:
+                logger.info("Cache hit", extra={"cache_key": cache_key})
+                cached_result.metadata["cache_hit"] = True
+                return cached_result
+        except Exception as e:
+            logger.warning(
+                "Cache lookup failed, proceeding to analysis",
+                extra={"error": str(e), "cache_key": cache_key},
+            )
+
+        logger.info("Cache miss", extra={"cache_key": cache_key})
 
         location_name = ""
         coordinates = None
@@ -55,6 +81,17 @@ class SearchService:
             location_name, coordinates
         )
 
+        analysis_result.metadata["cache_hit"] = False
+
+        # 3. Cache Store
+        try:
+            self.cache_service.set(cache_key, analysis_result)
+        except Exception as e:
+            logger.warning(
+                "Cache store failed",
+                extra={"error": str(e), "cache_key": cache_key},
+            )
+
         logger.info("Search orchestration complete")
         return analysis_result
 
@@ -62,5 +99,6 @@ class SearchService:
 def get_search_service(
     geospatial_service: GeospatialService = Depends(get_geospatial_service),
     analysis_service: AnalysisService = Depends(get_analysis_service),
+    cache_service: CacheService = Depends(get_cache_service),
 ) -> SearchService:
-    return SearchService(geospatial_service, analysis_service)
+    return SearchService(geospatial_service, analysis_service, cache_service)

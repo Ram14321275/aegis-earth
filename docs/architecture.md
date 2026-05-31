@@ -78,15 +78,18 @@ Current API foundation:
 Future disaster intelligence request flow:
 
 1. Accept `POST /api/v1/search` with city query or latitude/longitude.
-2. `SearchService` orchestrates resolution.
-3. `GeospatialService` resolves search into coordinates or reverse-geocodes.
-4. `AnalysisService` runs disaster engine analysis (currently mocked).
-5. Generate alerts and evidence layer descriptors.
-6. Return `AnalysisResult` via `APIResponse`.
+2. `SearchService` orchestrates resolution and computes a versioned cache key.
+3. `CacheService` lookup (if hit, return immediately).
+4. `GeospatialService` resolves search into coordinates or reverse-geocodes.
+5. `AnalysisService` runs disaster engine analysis (currently mocked).
+6. Generate alerts and evidence layer descriptors.
+7. `CacheService` stores the generated `AnalysisResult`.
+8. Return `AnalysisResult` via `APIResponse`.
 
 ## Service Boundaries
 
 - `search`: entrypoint orchestrator bridging requests to domains.
+- `cache`: TTL-based in-memory caching mapping versioned keys to intelligence responses.
 - `analysis`: high-level disaster analysis orchestration.
 - `disaster-engine`: flood and wildfire scoring, risk assessment, explainable drivers.
 - `model-interface`: stable contracts for future model replacement.

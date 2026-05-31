@@ -38,3 +38,18 @@ def test_search_endpoint_returns_analysis_result():
     assert "location_name" in data
     assert "coordinates" in data
     assert data["risk_assessment"]["hazard_type"] == "flood"
+    assert "cache_hit" in data["metadata"]
+
+def test_search_endpoint_cache_hit():
+    # Clear cache before test if needed, but unique city is fine
+    city = "CacheTestCity"
+    
+    # First request - Cache Miss
+    response1 = client.post("/api/v1/search", json={"query": city})
+    assert response1.status_code == 200
+    assert response1.json()["data"]["metadata"]["cache_hit"] is False
+    
+    # Second request - Cache Hit
+    response2 = client.post("/api/v1/search", json={"query": city})
+    assert response2.status_code == 200
+    assert response2.json()["data"]["metadata"]["cache_hit"] is True
