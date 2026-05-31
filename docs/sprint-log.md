@@ -27,9 +27,12 @@ In progress.
 - Added dark mission-control UI foundation.
 - Verified frontend build, frontend lint, backend tests, API health, and browser interaction.
 - Added approved frontend, backend, and decision-record architecture folders.
+- Initialized FastAPI backend foundation under `backend/app`.
+- Added versioned `/api/v1/health` endpoint, Pydantic Settings, structured logging, security headers, middleware readiness, schemas, validators, and backend tests.
+- Verified backend startup and health response without warnings.
 
 ### Remaining
 
-- Validate local PostgreSQL connection once a database is available.
+- Validate local PostgreSQL connection once database integration begins in a later checkpoint.
 - Replace deterministic Sprint 1 analysis stubs with provider-backed Sentinel and weather ingestion.
 - Expand request deduplication beyond process-local cache when infrastructure is available.

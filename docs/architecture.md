@@ -42,7 +42,35 @@ The frontend is an operator-facing mission-control interface. It prioritizes vis
 
 ## Backend
 
-The FastAPI backend exposes versioned API routes under `/api/v1`. Request flow:
+The FastAPI backend exposes versioned API routes under `/api/v1`.
+
+Sprint 1 Checkpoint 3 establishes the backend foundation under `backend/app`:
+
+```text
+backend/app/
+  api/v1/       Versioned API routes
+  core/         Settings, structured logging, and security helpers
+  middleware/   Request context and security header middleware
+  models/       Domain models, with database integration deferred
+  schemas/      Pydantic request and response schemas
+  services/     Backend application services
+  utils/        Shared backend utilities
+  validators/   Input validation primitives
+  tests/        Backend tests
+  main.py       FastAPI application entrypoint
+```
+
+Current API foundation:
+
+- `GET /api/v1/health`
+- Structured JSON application logging
+- Pydantic Settings configuration
+- Explicit CORS origin configuration prepared for future frontend integration
+- Security response headers through middleware
+- No database integration yet
+- No Google Earth Engine or Sentinel integration yet
+
+Future disaster intelligence request flow:
 
 1. Accept city or latitude/longitude search.
 2. Resolve search into coordinates.

@@ -11,16 +11,21 @@
 - Added React, Vite, TypeScript, Tailwind CSS, shadcn/ui-style components, Framer Motion, and Leaflet foundation
 - Refactored repository structure with approved `backend/app`, `frontend/src/features`, `frontend/src/store`, and `docs/decisions` folders
 - Documented repository architecture decision in `docs/decisions/0001-repository-architecture.md`
+- Sprint 1 Checkpoint 3 FastAPI backend foundation initialized under `backend/app`
+- Added `/api/v1/health`, Pydantic Settings, structured logging, security helpers, request middleware, schemas, validators, and backend tests
+- Verified backend dependency install, tests with warnings as errors, bytecode compilation, live Uvicorn startup, and exact health response
 
 ## Issues
 -
 
 ## Decisions
 - Sprint 1 started
+- Backend database and Earth Engine integrations remain deferred for later checkpoints
+- API routes must be versioned under `/api/v1`
 
 ## Next Steps
-- Frontend initialization
-- Backend initialization
+- Add backend domain endpoints only after MVP request/response contracts are approved
+- Prepare database design and migration plan before introducing persistence
 
 # Day 1
 
