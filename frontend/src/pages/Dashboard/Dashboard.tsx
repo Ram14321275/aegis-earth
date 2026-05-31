@@ -1,6 +1,8 @@
 import { Sidebar } from "../../components/layout/Sidebar";
 import { MapView } from "../../components/map/MapView";
 
+import { SearchBar } from "../../components/search/SearchBar";
+
 export function Dashboard() {
   return (
     <div className="flex h-full">
@@ -8,11 +10,12 @@ export function Dashboard() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Panel - Search / Summary */}
         <div className="h-16 border-b border-gray-800 bg-[#0B1220] flex items-center px-6 shrink-0 justify-between">
-          <div className="flex items-center gap-4 w-96">
-            <input 
-              type="text" 
-              placeholder="Search coordinates or location..." 
-              className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-sm text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+          <div className="flex items-center gap-4 w-96 z-50">
+            <SearchBar 
+              onLocationSelect={(result) => {
+                console.log("Location selected:", result);
+                // Here we would eventually update map center or trigger backend analysis
+              }}
             />
           </div>
           <div className="flex gap-4">
