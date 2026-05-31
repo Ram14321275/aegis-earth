@@ -38,6 +38,7 @@ In progress.
 - Implemented PostgreSQL persistence foundation with SQLAlchemy 2.0, Alembic migrations, and the strict Repository Pattern.
 - Designed provider abstraction layer defining strict async contracts for pulling imagery, metadata, and health checks across satellite API variants.
 - Implemented Earth Observation Domain Layer defining hazard models and deterministic risk scoring engine decoupled from API boundaries.
+- Implemented Alert Intelligence Layer computing deterministic situational alerts directly mapped to domain risk scoring.
 
 ### Remaining
 

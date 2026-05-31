@@ -33,9 +33,12 @@ class AnalysisService:
         """
         from app.domain.models.hazard import HazardType
         from app.domain.scoring.engine import RiskScoringEngine
+        from app.domain.alerts.engine import AlertEngine
+        import uuid
         
         hazard = HazardType.FLOOD
         score = RiskScoringEngine.calculate_score(hazard)
+        domain_alert = AlertEngine.generate_alert(hazard, score)
         
         risk = RiskAssessment(
             source=["Aegis Mock Engine"],
@@ -61,6 +64,16 @@ class AnalysisService:
             ],
         )
 
+        api_alert = AlertResponse(
+            source=["Aegis Mock Engine"],
+            confidence=0.85,
+            severity=SeverityEnum.MEDIUM,
+            analysis_version="1.0.0-mock",
+            alert_id=str(uuid.uuid4()),
+            message=f"{domain_alert.title}: {domain_alert.description}",
+            recommended_action=domain_alert.recommendation,
+        )
+
         return AnalysisResult(
             source=["Aegis Mock Engine"],
             confidence=0.85,
@@ -70,7 +83,7 @@ class AnalysisService:
             coordinates=coordinates,
             risk_assessment=risk,
             visualizations=[map_view],
-            alerts=[],
+            alerts=[api_alert],
         )
 
 

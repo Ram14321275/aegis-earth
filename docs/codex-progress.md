@@ -54,6 +54,12 @@
 - Created `HazardType` representing the standard array of Earth observation threats (e.g. `FLOOD`, `WILDFIRE`, `VEGETATION_LOSS`).
 - Engineered a deterministic `RiskScoringEngine` generating risk scores detached from AI/ML, mapped strictly off the Hazard domain boundaries.
 - Refactored `AnalysisService` and the `schemas` layer to consume the new decoupled `HazardType` definitions.
+- Sprint 1 Checkpoint 11 completed
+- Structured the Alert Intelligence Layer (`backend/app/domain/alerts/`).
+- Defined the `AlertLevel` enum (`INFO`, `WATCH`, `WARNING`, `CRITICAL`) and `Alert` entity model.
+- Created `AlertRules` implementing deterministic evaluation thresholds (e.g. 0-25 -> INFO, >75 -> CRITICAL).
+- Built `AlertEngine` ingesting hazard scoring vectors to construct complete situational awareness alerts.
+- Intersected the `AlertEngine` with the `AnalysisService` pipeline to transparently yield `AlertResponse` payloads within `AnalysisResult`.
 
 ## Issues
 -
