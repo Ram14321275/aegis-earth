@@ -65,6 +65,7 @@ backend/app/
 Current API foundation:
 
 - `GET /api/v1/health`
+- `POST /api/v1/search` (Search orchestration layer)
 - Unified `{"data": ..., "error": ...}` API response envelope for all endpoints
 - Context-bound `request_id` structured JSON logging for observability
 - Global exception handlers catching validation and unhandled exceptions securely
@@ -76,15 +77,17 @@ Current API foundation:
 
 Future disaster intelligence request flow:
 
-1. Accept city or latitude/longitude search.
-2. Resolve search into coordinates.
-3. Check cache.
-4. Run disaster engine analysis.
+1. Accept `POST /api/v1/search` with city query or latitude/longitude.
+2. `SearchService` orchestrates resolution.
+3. `GeospatialService` resolves search into coordinates or reverse-geocodes.
+4. `AnalysisService` runs disaster engine analysis (currently mocked).
 5. Generate alerts and evidence layer descriptors.
-6. Return explainable intelligence response.
+6. Return `AnalysisResult` via `APIResponse`.
 
 ## Service Boundaries
 
+- `search`: entrypoint orchestrator bridging requests to domains.
+- `analysis`: high-level disaster analysis orchestration.
 - `disaster-engine`: flood and wildfire scoring, risk assessment, explainable drivers.
 - `model-interface`: stable contracts for future model replacement.
 - `cache`: cache-first strategy and request deduplication primitives.

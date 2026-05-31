@@ -33,6 +33,7 @@ In progress.
 - Initialized frontend application architecture with React Router, responsive navigation shell, dark theme layout, and Home, Dashboard, Analysis, and NotFound page modules.
 - Verified frontend build and lint for the routing shell.
 - Designed production-grade disaster analysis response contracts (RiskAssessment, Visualizations, Alerts, AnalysisResult).
+- Implemented search layer and service orchestration mapping POST /api/v1/search to Geospatial and Analysis services.
 
 ### Remaining
 

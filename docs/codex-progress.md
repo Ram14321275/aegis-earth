@@ -28,6 +28,12 @@
 - Designed strict disaster analysis response contracts using Pydantic
 - Included common BaseIntelligenceModel to enforce UTC timestamps, confidence, severity, and attribution
 - Added unit tests to verify enums, default logic, and boundary validations
+- Sprint 1 Checkpoint 6 completed
+- Implemented `SearchRequest` schema supporting exclusive city query or coordinate inputs
+- Created `SearchService` orchestrator bridging geospatial resolution to intelligence generation
+- Created `AnalysisService` mock logic returning contracted analysis payloads
+- Exposed `POST /api/v1/search` with APIResponse envelope and request_id bindings
+- Verified orchestration routing, schema validation, and logging via `pytest`
 
 ## Issues
 -
