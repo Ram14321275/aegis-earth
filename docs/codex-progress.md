@@ -72,6 +72,11 @@
 - Implemented category-isolated cache keys for `location_search`, `satellite_metadata`, `analysis_results`, `risk_assessments`, and `alerts` inside `keys.py`.
 - Synchronized Cache output with the newly created Observability layer, streaming accurate hit-ratios natively.
 - Eliminated legacy synchronous `app/services/cache/` boundary.
+- Sprint 1 Checkpoint 17 completed
+- Built the Risk Assessment Foundation (`backend/app/core/risk/`) dynamically transforming analysis factors into standardized categories (LOW, MODERATE, HIGH, CRITICAL).
+- Programmed decoupled rule evaluation engines (`rules/flood.py`, `rules/wildfire.py`) utilizing configurable threshold limits rather than hardcoded logic.
+- Designed numerical calculators weighting hazard-specific features (e.g. burn area vs water coverage) into a clean 0-100 confidence-adjusted risk distribution.
+- Authored robust unit tests validating input models, extreme threshold behaviors, and strictly enforcing invalid confidence rejections.
 
 ## Issues
 -

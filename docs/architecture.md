@@ -97,6 +97,7 @@ Future disaster intelligence request flow:
 - `domain/alerts`: Alert intelligence layer generating deterministic alerts driven by the domain rules engine.
 - `core`: Infrastructure code including configuration, logging, and security.
 - `core/cache`: Unified caching foundation handling request deduplication, TTL evictions, and metrics synchronization.
+- `core/risk`: Standardized risk engine scoring hazards dynamically through threshold-driven rule configurations.
 - `observability`: Core telemetry, metrics, and health aggregation tracking system state.
 - `geospatial`: boundary for Earth Engine / standard mapping APIs.
 - `db`: pure persistence layer isolated from business logic using the Repository Pattern.
