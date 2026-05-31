@@ -14,6 +14,8 @@
 - Sprint 1 Checkpoint 3 FastAPI backend foundation initialized under `backend/app`
 - Added `/api/v1/health`, Pydantic Settings, structured logging, security helpers, request middleware, schemas, validators, and backend tests
 - Verified backend dependency install, tests with warnings as errors, bytecode compilation, live Uvicorn startup, and exact health response
+- Sprint 1 Checkpoint 4 frontend application architecture initialized with React Router, layouts, constants, utils, Home, Dashboard, Analysis, and NotFound pages
+- Added responsive navigation shell and dark theme page structure without disaster logic or API integration
 
 ## Issues
 -
@@ -26,6 +28,7 @@
 ## Next Steps
 - Add backend domain endpoints only after MVP request/response contracts are approved
 - Prepare database design and migration plan before introducing persistence
+- Build frontend feature modules after navigation and page contracts are reviewed
 
 # Day 1
 

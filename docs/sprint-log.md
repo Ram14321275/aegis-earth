@@ -30,6 +30,8 @@ In progress.
 - Initialized FastAPI backend foundation under `backend/app`.
 - Added versioned `/api/v1/health` endpoint, Pydantic Settings, structured logging, security headers, middleware readiness, schemas, validators, and backend tests.
 - Verified backend startup and health response without warnings.
+- Initialized frontend application architecture with React Router, responsive navigation shell, dark theme layout, and Home, Dashboard, Analysis, and NotFound page modules.
+- Verified frontend build and lint for the routing shell.
 
 ### Remaining
 

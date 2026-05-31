@@ -11,6 +11,7 @@ Official Sprint 1 frontend workspace for Aegis Earth.
 - shadcn/ui-style local components
 - Framer Motion
 - Leaflet
+- React Router
 
 ## Structure
 
@@ -18,13 +19,20 @@ Official Sprint 1 frontend workspace for Aegis Earth.
 frontend/src/
   assets/
   components/
+  constants/
+  layouts/
   features/
   hooks/
   pages/
+    Home/
+    Dashboard/
+    Analysis/
+    NotFound/
   routes/
   services/
   store/
   types/
+  utils/
 ```
 
 ## Commands
@@ -32,5 +40,6 @@ frontend/src/
 ```bash
 npm install
 npm run build
+npm run lint
 npm run dev
 ```
