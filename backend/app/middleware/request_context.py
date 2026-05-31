@@ -5,6 +5,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
+from app.core.logging import request_id_context
+
 RequestHandler = Callable[[Request], Awaitable[Response]]
 
 
@@ -15,11 +17,15 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next: RequestHandler) -> Response:
         request_id = request.headers.get("X-Request-ID", str(uuid4()))
-        response = await call_next(request)
-        response.headers["X-Request-ID"] = request_id
+        token = request_id_context.set(request_id)
+        try:
+            response = await call_next(request)
+            response.headers["X-Request-ID"] = request_id
 
-        for header, value in self.security_headers.items():
-            response.headers.setdefault(header, value)
+            for header, value in self.security_headers.items():
+                response.headers.setdefault(header, value)
 
-        return response
+            return response
+        finally:
+            request_id_context.reset(token)
 

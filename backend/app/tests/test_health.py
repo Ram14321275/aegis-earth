@@ -11,9 +11,12 @@ def test_api_v1_health() -> None:
 
     assert response.status_code == 200
     assert response.json() == {
-        "status": "healthy",
-        "service": "Aegis Earth",
-        "version": "v1",
+        "data": {
+            "status": "healthy",
+            "service": "Aegis Earth",
+            "version": "v1",
+        },
+        "error": None
     }
     assert response.headers["X-Content-Type-Options"] == "nosniff"
     assert response.headers["X-Frame-Options"] == "DENY"

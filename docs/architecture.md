@@ -52,7 +52,9 @@ backend/app/
   core/         Settings, structured logging, and security helpers
   middleware/   Request context and security header middleware
   models/       Domain models, with database integration deferred
-  schemas/      Pydantic request and response schemas
+  schemas/      Pydantic request and response schemas (with unified APIResponse envelope)
+                - geospatial.py: Coordinate and location abstractions
+                - intelligence.py: Disaster analysis response contracts
   services/     Backend application services
   utils/        Shared backend utilities
   validators/   Input validation primitives
@@ -63,7 +65,9 @@ backend/app/
 Current API foundation:
 
 - `GET /api/v1/health`
-- Structured JSON application logging
+- Unified `{"data": ..., "error": ...}` API response envelope for all endpoints
+- Context-bound `request_id` structured JSON logging for observability
+- Global exception handlers catching validation and unhandled exceptions securely
 - Pydantic Settings configuration
 - Explicit CORS origin configuration prepared for future frontend integration
 - Security response headers through middleware

@@ -32,6 +32,7 @@ In progress.
 - Verified backend startup and health response without warnings.
 - Initialized frontend application architecture with React Router, responsive navigation shell, dark theme layout, and Home, Dashboard, Analysis, and NotFound page modules.
 - Verified frontend build and lint for the routing shell.
+- Designed production-grade disaster analysis response contracts (RiskAssessment, Visualizations, Alerts, AnalysisResult).
 
 ### Remaining
 

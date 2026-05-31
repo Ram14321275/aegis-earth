@@ -2,10 +2,12 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_v1_router
 from app.core.config import get_settings
+from app.core.exceptions import global_exception_handler, validation_exception_handler
 from app.core.logging import configure_logging, get_logger
 from app.core.security import build_security_headers
 from app.middleware.request_context import RequestContextMiddleware
@@ -44,6 +46,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_middleware(RequestContextMiddleware, security_headers=build_security_headers())
+
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(Exception, global_exception_handler)
 
 app.include_router(api_v1_router, prefix="/api/v1")
 

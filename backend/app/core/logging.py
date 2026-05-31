@@ -1,7 +1,12 @@
+import contextvars
 import json
 import logging
 from datetime import datetime, timezone
 from typing import Any
+
+request_id_context: contextvars.ContextVar[str | None] = contextvars.ContextVar(
+    "request_id", default=None
+)
 
 
 class StructuredJsonFormatter(logging.Formatter):
@@ -37,6 +42,10 @@ class StructuredJsonFormatter(logging.Formatter):
             "logger": record.name,
             "message": record.getMessage(),
         }
+
+        req_id = request_id_context.get()
+        if req_id:
+            payload["request_id"] = req_id
 
         for key, value in record.__dict__.items():
             if key not in self.reserved_fields and not key.startswith("_"):
