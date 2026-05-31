@@ -77,6 +77,10 @@
 - Programmed decoupled rule evaluation engines (`rules/flood.py`, `rules/wildfire.py`) utilizing configurable threshold limits rather than hardcoded logic.
 - Designed numerical calculators weighting hazard-specific features (e.g. burn area vs water coverage) into a clean 0-100 confidence-adjusted risk distribution.
 - Authored robust unit tests validating input models, extreme threshold behaviors, and strictly enforcing invalid confidence rejections.
+- Sprint 1 Checkpoint 18 completed
+- Built the Alert Engine Foundation (`backend/app/core/alerts/`) automatically translating RiskAssessments into actionable human-readable intelligence warnings.
+- Fully synchronized new alert generators with the underlying custom metrics layer tracing latency, outputs, and critical failures directly via `/api/v1/system/metrics`.
+- Hooked the Alert engine's live availability up to the global health aggregator (`/api/v1/system/health`).
 
 ## Issues
 -

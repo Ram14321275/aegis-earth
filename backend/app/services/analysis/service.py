@@ -42,7 +42,7 @@ class AnalysisService:
         domain_alert = AlertEngine.generate_alert(hazard, score)
 
         metrics_store.record_analysis(hazard.value, score)
-        metrics_store.record_alert(domain_alert.level.value)
+        metrics_store.record_alerts_generated(domain_alert.level.value.upper())
 
         risk = RiskAssessment(
             source=["Aegis Mock Engine"],

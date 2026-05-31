@@ -38,10 +38,10 @@ class MetricsStore:
         self.total_risk_score = 0.0
 
         # Alerts
-        self.info_alerts = 0
-        self.watch_alerts = 0
-        self.warning_alerts = 0
-        self.critical_alerts = 0
+        self.alerts_generated_total = 0
+        self.alerts_high_total = 0
+        self.alerts_critical_total = 0
+        self.alerts_generation_ms = 0.0
 
         self._metrics_lock = threading.Lock()
 
@@ -69,16 +69,17 @@ class MetricsStore:
                 self.hazard_breakdown.get(hazard_type, 0) + 1
             )
 
-    def record_alert(self, level: str):
+    def record_alerts_generated(self, level: str):
         with self._metrics_lock:
-            if level == "info":
-                self.info_alerts += 1
-            elif level == "watch":
-                self.watch_alerts += 1
-            elif level == "warning":
-                self.warning_alerts += 1
-            elif level == "critical":
-                self.critical_alerts += 1
+            self.alerts_generated_total += 1
+            if level == "HIGH":
+                self.alerts_high_total += 1
+            elif level == "CRITICAL":
+                self.alerts_critical_total += 1
+
+    def record_alerts_duration(self, latency_ms: float):
+        with self._metrics_lock:
+            self.alerts_generation_ms += latency_ms
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
@@ -115,10 +116,10 @@ class MetricsStore:
                     average_risk_score=avg_risk,
                 ),
                 alerts=AlertMetrics(
-                    info_alerts=self.info_alerts,
-                    watch_alerts=self.watch_alerts,
-                    warning_alerts=self.warning_alerts,
-                    critical_alerts=self.critical_alerts,
+                    alerts_generated_total=self.alerts_generated_total,
+                    alerts_high_total=self.alerts_high_total,
+                    alerts_critical_total=self.alerts_critical_total,
+                    alerts_generation_ms=self.alerts_generation_ms,
                 ),
             )
 

@@ -11,16 +11,16 @@ def test_metrics_store():
     metrics_store.record_cache_access(True)
     metrics_store.record_cache_access(False)
     metrics_store.record_analysis("flood", 85.0)
-    metrics_store.record_alert("critical")
-
+    metrics_store.record_alerts_generated("CRITICAL")
+    
     metrics = metrics_store.get_metrics()
-
+    assert metrics.alerts.alerts_critical_total >= 1
+    
     assert metrics.api.total_requests >= 2
     assert metrics.api.successful_requests >= 1
     assert metrics.cache.cache_hits_total >= 1
     assert metrics.analysis.total_analyses >= 1
     assert "flood" in metrics.analysis.hazard_breakdown
-    assert metrics.alerts.critical_alerts >= 1
 
 
 @pytest.fixture

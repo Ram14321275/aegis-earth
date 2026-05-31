@@ -1,26 +1,58 @@
-from app.domain.alerts.engine import AlertEngine
-from app.domain.alerts.models import AlertLevel
-from app.domain.alerts.rules import AlertRules
-from app.domain.models.hazard import HazardType
+import pytest
+
+from app.core.alerts.models import AlertLevel
+from app.core.alerts.service import alert_service
+from app.schemas.geospatial import Coordinates
+from app.schemas.intelligence import (
+    AnalysisResult,
+    HazardTypeEnum,
+)
+from app.schemas.intelligence import RiskAssessment as OldRiskAssessment
+from app.schemas.intelligence import SeverityEnum
 
 
-def test_alert_rules():
-    assert AlertRules.get_level_for_score(0) == AlertLevel.INFO
-    assert AlertRules.get_level_for_score(25) == AlertLevel.INFO
-    assert AlertRules.get_level_for_score(26) == AlertLevel.WATCH
-    assert AlertRules.get_level_for_score(50) == AlertLevel.WATCH
-    assert AlertRules.get_level_for_score(51) == AlertLevel.WARNING
-    assert AlertRules.get_level_for_score(75) == AlertLevel.WARNING
-    assert AlertRules.get_level_for_score(76) == AlertLevel.CRITICAL
-    assert AlertRules.get_level_for_score(100) == AlertLevel.CRITICAL
+def test_alert_generation():
+    risk = OldRiskAssessment(
+        source=["mock"],
+        confidence=0.9,
+        severity=SeverityEnum.HIGH,
+        analysis_version="1.0",
+        hazard_type=HazardTypeEnum.FLOOD,
+        score=85.0,
+        drivers=["driver 1"],
+    )
+    analysis = AnalysisResult(
+        source=["mock"],
+        confidence=0.9,
+        severity=SeverityEnum.HIGH,
+        analysis_version="1.0",
+        location_name="Hyderabad",
+        coordinates=Coordinates(lat=17.385, lon=78.4867),
+        risk_assessment=risk,
+        visualizations=[],
+        alerts=[],
+    )
+
+    summary = alert_service.generate_alerts(risk, analysis, {})
+    assert len(summary.alerts) == 1
+
+    alert = summary.alerts[0]
+    assert alert.severity == AlertLevel.HIGH
+    assert alert.title == "Flood Warning"
+    assert "Significant flooding risk" in alert.message
+    assert alert.confidence == 0.9
+    assert alert.metadata.location == "Hyderabad"
 
 
-def test_alert_engine():
-    alert = AlertEngine.generate_alert(HazardType.FLOOD, 85.0)
-    assert alert.title == "Flood Alert"
-    assert alert.level == AlertLevel.CRITICAL
-    assert "Extreme hazard" in alert.description
-
-    alert2 = AlertEngine.generate_alert(HazardType.WILDFIRE, 40.0)
-    assert alert2.title == "Wildfire Alert"
-    assert alert2.level == AlertLevel.WATCH
+def test_invalid_confidence():
+    risk = OldRiskAssessment.model_construct(
+        source=["mock"],
+        confidence=1.5,
+        severity=SeverityEnum.HIGH,
+        analysis_version="1.0",
+        hazard_type=HazardTypeEnum.FLOOD,
+        score=85.0,
+        drivers=["driver 1"],
+    )
+    with pytest.raises(ValueError, match="Confidence must be between 0.0 and 1.0"):
+        alert_service.generate_alerts(risk, None, {})

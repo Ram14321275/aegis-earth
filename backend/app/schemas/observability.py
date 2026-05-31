@@ -23,10 +23,10 @@ class AnalysisMetrics(BaseModel):
 
 
 class AlertMetrics(BaseModel):
-    info_alerts: int
-    watch_alerts: int
-    warning_alerts: int
-    critical_alerts: int
+    alerts_generated_total: int
+    alerts_high_total: int
+    alerts_critical_total: int
+    alerts_generation_ms: float
 
 
 class SystemMetricsResponse(BaseModel):
