@@ -1,0 +1,2 @@
+"""Replaceable model interface contracts."""
+

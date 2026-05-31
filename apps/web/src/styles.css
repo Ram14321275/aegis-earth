@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background: #06111f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(6, 17, 31, 0.95), rgba(6, 17, 31, 1)),
+    radial-gradient(circle at 20% 10%, rgba(73, 211, 180, 0.1), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(125, 211, 252, 0.08), transparent 26%);
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #06111f;
+  filter: saturate(0.75) contrast(1.08) brightness(0.72);
+}
+
+.map-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 400;
+  mix-blend-mode: screen;
+}
+
+.map-overlay-map {
+  background: linear-gradient(135deg, rgba(73, 211, 180, 0.08), transparent 36%);
+}
+
+.map-overlay-heatmap {
+  background:
+    radial-gradient(circle at 48% 47%, rgba(242, 184, 75, 0.55), transparent 20%),
+    radial-gradient(circle at 56% 54%, rgba(255, 107, 107, 0.38), transparent 18%),
+    radial-gradient(circle at 40% 58%, rgba(73, 211, 180, 0.22), transparent 22%);
+}
+
+.map-overlay-difference {
+  background:
+    linear-gradient(90deg, rgba(73, 211, 180, 0.16) 0 49.6%, rgba(231, 238, 248, 0.62) 49.6% 50.4%, rgba(255, 107, 107, 0.22) 50.4%),
+    repeating-linear-gradient(135deg, rgba(231, 238, 248, 0.1) 0 1px, transparent 1px 18px);
+}
+
+.leaflet-control-zoom a {
+  background: rgba(6, 17, 31, 0.9) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+  color: #e7eef8 !important;
+}
+

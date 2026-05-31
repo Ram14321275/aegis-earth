@@ -1,0 +1,2 @@
+"""Aegis Earth FastAPI application."""
+

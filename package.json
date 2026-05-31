@@ -1,0 +1,16 @@
+{
+  "name": "aegis-earth",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Disaster intelligence platform - Observe. Analyze. Protect.",
+  "scripts": {
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:lint": "npm --prefix apps/web run lint",
+    "api:dev": "uvicorn app.main:app --app-dir apps/api --reload --port 8000"
+  },
+  "workspaces": [
+    "apps/web"
+  ]
+}
+
