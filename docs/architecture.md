@@ -95,6 +95,7 @@ Future disaster intelligence request flow:
 - `model-interface`: stable contracts for future model replacement.
 - `geospatial`: boundary for Earth Engine / standard mapping APIs.
 - `db`: pure persistence layer isolated from business logic using the Repository Pattern.
+- `providers`: abstraction layer standardizing inputs from external satellite networks (Earth Engine, Sentinel).
 - `alert-engine`: alert generation from hazard signals.
 - `visualization`: map, heat map, and difference map layer descriptors.
 - `geospatial`: coordinate resolution and geospatial normalization.

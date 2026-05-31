@@ -24,6 +24,7 @@ class Settings(BaseSettings):
         default="postgresql+asyncpg://postgres:postgres@localhost:5432/aegis_earth",
         alias="DATABASE_URL",
     )
+    active_provider: str = Field(default="mock", alias="AEGIS_ACTIVE_PROVIDER")
 
 
 @lru_cache

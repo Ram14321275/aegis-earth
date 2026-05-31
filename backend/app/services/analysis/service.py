@@ -1,17 +1,32 @@
+from fastapi import Depends
+
+from app.core.config import get_settings
 from app.schemas.geospatial import Coordinates
 from app.schemas.intelligence import (
+    AlertResponse,
     AnalysisResult,
-    HazardTypeEnum,
+    DifferenceMapView,
+    HeatMapView,
     MapView,
     RiskAssessment,
+    HazardTypeEnum,
     SeverityEnum,
 )
+from app.providers.base import ProviderInterface
+from app.providers.contracts import ProviderConfig, ProviderType
+from app.providers.manager import ProviderManager
 
 
 class AnalysisService:
+    def __init__(self, provider: ProviderInterface):
+        self.provider = provider
+
     async def analyze(
         self, location_name: str, coordinates: Coordinates
     ) -> AnalysisResult:
+        # Fetch imagery and metadata via provider
+        imagery = await self.provider.get_imagery(coordinates.lat, coordinates.lon)
+        metadata = await self.provider.get_metadata(coordinates.lat, coordinates.lon)
         """
         Mock implementation of the disaster analysis engine.
         Returns a mocked AnalysisResult.
@@ -54,4 +69,8 @@ class AnalysisService:
 
 
 def get_analysis_service() -> AnalysisService:
-    return AnalysisService()
+    settings = get_settings()
+    provider_type = ProviderType(settings.active_provider)
+    config = ProviderConfig(provider_type=provider_type)
+    provider = ProviderManager.get_provider(config)
+    return AnalysisService(provider)
