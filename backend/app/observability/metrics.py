@@ -29,8 +29,8 @@ class MetricsStore:
         self.total_latency_ms = 0.0
 
         # Cache
-        self.cache_hits = 0
-        self.cache_misses = 0
+        self.cache_hits_total = 0
+        self.cache_misses_total = 0
 
         # Analysis
         self.total_analyses = 0
@@ -57,9 +57,9 @@ class MetricsStore:
     def record_cache_access(self, hit: bool):
         with self._metrics_lock:
             if hit:
-                self.cache_hits += 1
+                self.cache_hits_total += 1
             else:
-                self.cache_misses += 1
+                self.cache_misses_total += 1
 
     def record_analysis(self, hazard_type: str, risk_score: float):
         with self._metrics_lock:
@@ -88,8 +88,8 @@ class MetricsStore:
                 else 0.0
             )
 
-            total_cache = self.cache_hits + self.cache_misses
-            cache_ratio = self.cache_hits / total_cache if total_cache > 0 else 0.0
+            total_cache = self.cache_hits_total + self.cache_misses_total
+            cache_ratio = self.cache_hits_total / total_cache if total_cache > 0 else 0.0
 
             avg_risk = (
                 self.total_risk_score / self.total_analyses
@@ -105,8 +105,8 @@ class MetricsStore:
                     average_latency_ms=avg_latency,
                 ),
                 cache=CacheMetrics(
-                    cache_hits=self.cache_hits,
-                    cache_misses=self.cache_misses,
+                    cache_hits_total=self.cache_hits_total,
+                    cache_misses_total=self.cache_misses_total,
                     cache_hit_ratio=cache_ratio,
                 ),
                 analysis=AnalysisMetrics(

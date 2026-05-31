@@ -11,8 +11,8 @@ class APIMetrics(BaseModel):
 
 
 class CacheMetrics(BaseModel):
-    cache_hits: int
-    cache_misses: int
+    cache_hits_total: int
+    cache_misses_total: int
     cache_hit_ratio: float
 
 

@@ -40,6 +40,7 @@ In progress.
 - Implemented Earth Observation Domain Layer defining hazard models and deterministic risk scoring engine decoupled from API boundaries.
 - Implemented Alert Intelligence Layer computing deterministic situational alerts directly mapped to domain risk scoring.
 - Implemented Observability Foundation providing metrics and health tracking endpoints decoupled from external Prometheus/Grafana stacks.
+- Re-architected intelligent caching foundation (`core/cache`) shifting to fully async boundaries with request deduplication and category isolation.
 
 ### Remaining
 

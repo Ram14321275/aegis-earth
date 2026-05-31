@@ -17,9 +17,22 @@ class HealthAggregator:
         components["api"] = ComponentHealth(status="healthy", details={"version": "v1"})
 
         # 2. Cache Health
-        components["cache"] = ComponentHealth(
-            status="healthy", details={"type": "in-memory"}
-        )
+        try:
+            from app.core.cache.manager import cache_manager
+            cache_status = await cache_manager.get_status()
+            components["cache"] = ComponentHealth(
+                status=cache_status["status"], 
+                details={
+                    "type": "in-memory",
+                    "availability": cache_status["availability"],
+                    "metrics_summary": cache_status["metrics_summary"]
+                }
+            )
+        except Exception as e:
+            components["cache"] = ComponentHealth(
+                status="unhealthy", details={"error": str(e)}
+            )
+            overall_status = "degraded"
 
         # 3. Database Health
         try:

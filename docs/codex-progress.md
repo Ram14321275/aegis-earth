@@ -66,6 +66,12 @@
 - Implemented `TelemetryMiddleware` inside the FastAPI `main.py` intercepting API lifecycle data.
 - Built a unified `HealthAggregator` synthesizing readiness of Cache, Database, Provider, and API boundaries.
 - Defined explicit REST endpoints `GET /api/v1/system/metrics` and `GET /api/v1/system/health` under strongly-typed schemas.
+- Sprint 1 Checkpoint 13 completed
+- Designed a scalable internal intelligent caching foundation inside `backend/app/core/cache/`.
+- Deployed request deduplication leveraging strict asynchronous locks within `manager.py`, fundamentally resolving the thundering herd problem.
+- Implemented category-isolated cache keys for `location_search`, `satellite_metadata`, `analysis_results`, `risk_assessments`, and `alerts` inside `keys.py`.
+- Synchronized Cache output with the newly created Observability layer, streaming accurate hit-ratios natively.
+- Eliminated legacy synchronous `app/services/cache/` boundary.
 
 ## Issues
 -

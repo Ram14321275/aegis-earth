@@ -17,7 +17,7 @@ def test_metrics_store():
 
     assert metrics.api.total_requests >= 2
     assert metrics.api.successful_requests >= 1
-    assert metrics.cache.cache_hits >= 1
+    assert metrics.cache.cache_hits_total >= 1
     assert metrics.analysis.total_analyses >= 1
     assert "flood" in metrics.analysis.hazard_breakdown
     assert metrics.alerts.critical_alerts >= 1
