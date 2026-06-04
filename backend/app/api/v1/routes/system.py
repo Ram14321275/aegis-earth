@@ -5,7 +5,7 @@ from app.observability.metrics import metrics_store
 from app.schemas.common import APIResponse
 from app.schemas.observability import SystemHealthResponse, SystemMetricsResponse
 
-router = APIRouter()
+router = APIRouter(prefix="/system", tags=["System"])
 
 
 @router.get("/metrics", response_model=APIResponse[SystemMetricsResponse])

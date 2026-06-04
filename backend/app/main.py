@@ -28,7 +28,17 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
             "environment": settings.environment,
         },
     )
+    from app.core.workers.service import worker_service
+    from app.core.workers.scheduler import worker_scheduler
+    
+    await worker_service.start_workers(count=4)
+    await worker_scheduler.start()
+    
     yield
+    
+    await worker_service.stop_workers()
+    await worker_scheduler.stop()
+    
     logger.info("backend_stopped", extra={"service": settings.service_name})
 
 
@@ -49,7 +59,18 @@ app.add_middleware(
 app.add_middleware(RequestContextMiddleware, security_headers=build_security_headers())
 app.add_middleware(TelemetryMiddleware)
 
+from app.core.exceptions import (
+    global_exception_handler, 
+    validation_exception_handler,
+    NotFoundError,
+    ValidationError as CustomValidationError,
+    not_found_exception_handler,
+    custom_validation_exception_handler
+)
+
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(CustomValidationError, custom_validation_exception_handler)
+app.add_exception_handler(NotFoundError, not_found_exception_handler)
 app.add_exception_handler(Exception, global_exception_handler)
 
 app.include_router(api_v1_router, prefix="/api/v1")

@@ -119,6 +119,15 @@
 - Refactored `CacheService` and `CacheManager` exclusively targeting Redis primitives.
 - Linked global `/api/v1/system/metrics` with precise `CacheMetrics` including cache hit ratios and Redis distributed lock tracing.
 - Extended `/api/v1/system/health` tracking exact Redis ping latency explicitly.
+- Sprint 1 Checkpoint 28 completed
+- Architected the `AnalysisJob` Domain and Database layers to facilitate long-running asynchronous spatial tasks.
+- Defined robust state machine validators enforcing `PENDING` -> `QUEUED` -> `RUNNING` transitions.
+- Integrated background queue primitives decoupling HTTP responses from heavy model ingestion latency.
+- Exposed explicit `POST /api/v1/jobs` and `GET /api/v1/jobs/{job_id}` endpoints tracking geospatial processing in real-time.
+- Sprint 1 Checkpoint 29 completed
+- Engineered the Background Worker architecture bound directly to the FastAPI lifespan lifecycle via autonomous `WorkerExecutor` tasks.
+- Built a native `WorkerScheduler` system maintaining an automated heartbeat resolving offline instances and enforcing retry caps.
+- Plumbed deep observability into `MetricsStore` tracing `jobs_completed_total` and `workers_active_total` natively over `/api/v1/system/metrics`.
 ## Issues
 -
 

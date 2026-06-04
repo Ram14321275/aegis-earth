@@ -9,6 +9,8 @@ from app.schemas.observability import (
     DatabaseMetrics,
     SystemMetricsResponse,
     VisualizationMetrics,
+    JobMetrics,
+    WorkerMetrics,
 )
 
 
@@ -56,6 +58,16 @@ class MetricsStore:
         self.db_queries_total = 0
         self.db_query_duration_ms = 0.0
         self.db_failures_total = 0
+
+        # Jobs & Workers
+        self.jobs_created_total = 0
+        self.jobs_completed_total = 0
+        self.jobs_failed_total = 0
+        self.jobs_retried_total = 0
+        self.queue_depth = 0
+        self.workers_active_total = 0
+        self.worker_failures_total = 0
+        self.worker_execution_time_ms = 0.0
 
         self._metrics_lock = threading.Lock()
 
@@ -121,6 +133,38 @@ class MetricsStore:
             else:
                 self.db_failures_total += 1
 
+    def record_job_created(self):
+        with self._metrics_lock:
+            self.jobs_created_total += 1
+
+    def record_job_completed(self):
+        with self._metrics_lock:
+            self.jobs_completed_total += 1
+
+    def record_job_failed(self):
+        with self._metrics_lock:
+            self.jobs_failed_total += 1
+
+    def record_job_retried(self):
+        with self._metrics_lock:
+            self.jobs_retried_total += 1
+
+    def update_queue_depth(self, depth: int):
+        with self._metrics_lock:
+            self.queue_depth = depth
+
+    def set_workers_active(self, active: int):
+        with self._metrics_lock:
+            self.workers_active_total = active
+
+    def record_worker_failure(self):
+        with self._metrics_lock:
+            self.worker_failures_total += 1
+
+    def record_worker_execution(self, duration_ms: float):
+        with self._metrics_lock:
+            self.worker_execution_time_ms += duration_ms
+
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
             avg_latency = (
@@ -172,6 +216,18 @@ class MetricsStore:
                     queries_total=self.db_queries_total,
                     query_duration_ms=self.db_query_duration_ms,
                     failures_total=self.db_failures_total,
+                ),
+                jobs=JobMetrics(
+                    jobs_created_total=self.jobs_created_total,
+                    jobs_completed_total=self.jobs_completed_total,
+                    jobs_failed_total=self.jobs_failed_total,
+                    jobs_retried_total=self.jobs_retried_total,
+                    queue_depth=self.queue_depth,
+                ),
+                workers=WorkerMetrics(
+                    workers_active_total=self.workers_active_total,
+                    worker_failures_total=self.worker_failures_total,
+                    worker_execution_time_ms=self.worker_execution_time_ms,
                 )
             )
 

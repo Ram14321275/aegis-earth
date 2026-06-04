@@ -9,8 +9,12 @@ from alembic import context
 
 from app.core.config import get_settings
 from app.db.base import Base
-import app.db.models.location_search  # noqa
-import app.db.models.analysis_record  # noqa
+import app.db.models.location  # noqa
+import app.db.models.analysis  # noqa
+import app.db.models.alert  # noqa
+import app.db.models.audit  # noqa
+import app.db.models.risk  # noqa
+import app.db.models.analysis_job  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

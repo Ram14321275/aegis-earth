@@ -54,6 +54,11 @@ In progress.
 - Deployed Redis-backed `DistributedLock` preventing cache stampedes.
 - Migrated legacy coordinate cache keys to normalized spatial tile cache keys.
 - Synchronized detailed Redis metrics (locks, wait times, errors) natively with `/api/v1/system/metrics`.
+- Sprint 1 Checkpoint 28 & 29 completed (Analysis Job System & Background Worker Architecture).
+- Transformed backend to an asynchronous job-driven architecture decoupling heavy geospatial operations from HTTP latency.
+- Introduced `AnalysisJob` entity mapping strict status lifecycles from `QUEUED` to `COMPLETED`/`FAILED`.
+- Engineered a scalable Background Worker Executor bounding worker lifetimes to the FastAPI loop and polling an abstract Queue interface.
+- Developed the `WorkerScheduler` enabling automated health checks, offline purges, and automated retry mechanisms on transient failure states.
 
 ### Remaining
 

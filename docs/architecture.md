@@ -100,6 +100,8 @@ Future disaster intelligence request flow:
 - `frontend`: React frontend application deployed using Vite, mapped explicitly with Leaflet bounds and dynamic Intelligence Dashboard layouts including Search Experience tracking local state telemetry, Dashboard KPI modules, Alert Feeds, and Risk Summaries.
 - `core`: Infrastructure code including configuration, logging, and security.
 - `core/cache`: Unified Redis caching foundation handling request deduplication via distributed locks, TTL evictions, and metrics synchronization.
+- `core/jobs`: Analysis Job domain tracking spatial computations through strict state machines, enabling asynchronous workloads decoupled from HTTP request loops.
+- `core/workers`: Background Worker Architecture bound to the FastAPI lifecycle, processing queued jobs robustly with automatic retry recovery and offline purges via the Scheduler.
 - `core/risk`: Standardized risk engine scoring hazards dynamically through threshold-driven rule configurations.
 - `observability`: Core telemetry, metrics, and health aggregation tracking system state.
 - `geospatial`: boundary for Earth Engine / standard mapping APIs.

@@ -130,6 +130,21 @@ class HealthAggregator:
             )
             overall_status = "degraded"
 
+        from app.observability.metrics import metrics_store
+        metrics = metrics_store.get_metrics()
+        
+        from app.core.jobs.health import get_job_system_health
+        jobs_health = await get_job_system_health()
+        
+        from app.core.workers.health import get_worker_system_health
+        workers_health = get_worker_system_health()
+
+        # Wire running jobs count dynamically from busy workers
+        jobs_health["running"] = workers_health["busy"]
+
         return SystemHealthResponse(
-            status=overall_status, components=components
+            status=overall_status, 
+            components=components,
+            jobs=jobs_health,
+            workers=workers_health
         )

@@ -7,11 +7,34 @@ from app.core.logging import get_logger
 
 logger = get_logger(__name__)
 
+class NotFoundError(Exception):
+    def __init__(self, message: str):
+        self.message = message
+
+class ValidationError(Exception):
+    def __init__(self, message: str):
+        self.message = message
+
+
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     logger.warning("Validation error", extra={"errors": exc.errors(), "body": exc.body})
     error_detail = ErrorDetail(code="VALIDATION_ERROR", message="Invalid request parameters")
     return JSONResponse(
         status_code=422,
+        content=APIResponse(error=error_detail).model_dump(exclude_none=True)
+    )
+
+async def custom_validation_exception_handler(request: Request, exc: ValidationError) -> JSONResponse:
+    error_detail = ErrorDetail(code="VALIDATION_ERROR", message=exc.message)
+    return JSONResponse(
+        status_code=422,
+        content=APIResponse(error=error_detail).model_dump(exclude_none=True)
+    )
+
+async def not_found_exception_handler(request: Request, exc: NotFoundError) -> JSONResponse:
+    error_detail = ErrorDetail(code="NOT_FOUND", message=exc.message)
+    return JSONResponse(
+        status_code=404,
         content=APIResponse(error=error_detail).model_dump(exclude_none=True)
     )
 

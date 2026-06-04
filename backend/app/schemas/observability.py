@@ -43,6 +43,20 @@ class DatabaseMetrics(BaseModel):
     failures_total: int
 
 
+class JobMetrics(BaseModel):
+    jobs_created_total: int
+    jobs_completed_total: int
+    jobs_failed_total: int
+    jobs_retried_total: int
+    queue_depth: int
+
+
+class WorkerMetrics(BaseModel):
+    workers_active_total: int
+    worker_failures_total: int
+    worker_execution_time_ms: float
+
+
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
     cache: CacheMetrics
@@ -50,6 +64,8 @@ class SystemMetricsResponse(BaseModel):
     alerts: AlertMetrics
     visualizations: VisualizationMetrics
     database: DatabaseMetrics
+    jobs: JobMetrics
+    workers: WorkerMetrics
 
 
 class ComponentHealth(BaseModel):
@@ -60,3 +76,5 @@ class ComponentHealth(BaseModel):
 class SystemHealthResponse(BaseModel):
     status: str
     components: Dict[str, ComponentHealth]
+    jobs: Dict[str, int] = {}
+    workers: Dict[str, int] = {}
