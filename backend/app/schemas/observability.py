@@ -14,6 +14,9 @@ class CacheMetrics(BaseModel):
     cache_hits_total: int
     cache_misses_total: int
     cache_hit_ratio: float
+    redis_lock_acquired_total: int = 0
+    redis_lock_wait_total_ms: float = 0.0
+    redis_errors_total: int = 0
 
 
 class AnalysisMetrics(BaseModel):

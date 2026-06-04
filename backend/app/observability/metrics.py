@@ -30,9 +30,12 @@ class MetricsStore:
         self.failed_requests = 0
         self.total_latency_ms = 0.0
 
-        # Cache
+        # Cache & Redis
         self.cache_hits_total = 0
         self.cache_misses_total = 0
+        self.redis_lock_acquired_total = 0
+        self.redis_lock_wait_total_ms = 0.0
+        self.redis_errors_total = 0
 
         # Analysis
         self.total_analyses = 0
@@ -71,6 +74,16 @@ class MetricsStore:
                 self.cache_hits_total += 1
             else:
                 self.cache_misses_total += 1
+
+    def record_redis_lock(self, acquired: bool, wait_ms: float = 0.0):
+        with self._metrics_lock:
+            if acquired:
+                self.redis_lock_acquired_total += 1
+            self.redis_lock_wait_total_ms += wait_ms
+
+    def record_redis_error(self):
+        with self._metrics_lock:
+            self.redis_errors_total += 1
 
     def record_analysis(self, hazard_type: str, risk_score: float):
         with self._metrics_lock:
@@ -136,6 +149,9 @@ class MetricsStore:
                     cache_hits_total=self.cache_hits_total,
                     cache_misses_total=self.cache_misses_total,
                     cache_hit_ratio=cache_ratio,
+                    redis_lock_acquired_total=self.redis_lock_acquired_total,
+                    redis_lock_wait_total_ms=self.redis_lock_wait_total_ms,
+                    redis_errors_total=self.redis_errors_total,
                 ),
                 analysis=AnalysisMetrics(
                     total_analyses=self.total_analyses,

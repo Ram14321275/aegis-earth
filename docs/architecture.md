@@ -83,13 +83,13 @@ Future disaster intelligence request flow:
 4. `GeospatialService` resolves search into coordinates or reverse-geocodes.
 5. `AnalysisService` runs disaster engine analysis (currently mocked).
 6. Generate alerts and evidence layer descriptors.
-7. `CacheService` stores the generated `AnalysisResult`.
+7. `CacheService` stores the generated `AnalysisResult` in Redis.
 8. Return `AnalysisResult` via `APIResponse`.
 
 ## Service Boundaries
 
 - `search`: entrypoint orchestrator bridging requests to domains.
-- `cache`: TTL-based in-memory caching mapping versioned keys to intelligence responses.
+- `cache`: TTL-based Redis distributed cache mapping versioned tile keys to intelligence responses, protected by distributed locks.
 - `analysis`: high-level disaster analysis orchestration.
 - `disaster-engine`: flood and wildfire scoring, risk assessment, explainable drivers.
 - `model-interface`: stable contracts for future model replacement.
@@ -99,7 +99,7 @@ Future disaster intelligence request flow:
 - `db`: Database foundation handling async operations with explicit Repository patterns supporting Location, Analysis, Risk, Alerts, and Audit logs.
 - `frontend`: React frontend application deployed using Vite, mapped explicitly with Leaflet bounds and dynamic Intelligence Dashboard layouts including Search Experience tracking local state telemetry, Dashboard KPI modules, Alert Feeds, and Risk Summaries.
 - `core`: Infrastructure code including configuration, logging, and security.
-- `core/cache`: Unified caching foundation handling request deduplication, TTL evictions, and metrics synchronization.
+- `core/cache`: Unified Redis caching foundation handling request deduplication via distributed locks, TTL evictions, and metrics synchronization.
 - `core/risk`: Standardized risk engine scoring hazards dynamically through threshold-driven rule configurations.
 - `observability`: Core telemetry, metrics, and health aggregation tracking system state.
 - `geospatial`: boundary for Earth Engine / standard mapping APIs.

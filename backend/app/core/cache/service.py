@@ -1,32 +1,31 @@
-import time
-from typing import Any, Dict, Optional
+import json
+import logging
+from typing import Any, Optional
 
-from pydantic import BaseModel
+from app.core.cache.cache_policies import CachePolicy
+from app.core.cache.redis_client import redis_client
 
-from app.core.cache.policies import CachePolicy
-
-
-class CacheEntry(BaseModel):
-    key: str
-    value: Any
-    created_at: float
-    expires_at: float
+logger = logging.getLogger(__name__)
 
 
 class CacheService:
     def __init__(self):
-        self._store: Dict[str, CacheEntry] = {}
+        pass
 
     async def get(self, key: str) -> Optional[Any]:
-        entry = self._store.get(key)
-        if not entry:
+        client = await redis_client.get_client()
+        if not client:
+            logger.warning("Redis client unavailable, bypassing cache GET.")
             return None
 
-        if time.time() > entry.expires_at:
-            await self.invalidate(key)
+        try:
+            val = await client.get(key)
+            if val is not None:
+                return json.loads(val)
             return None
-
-        return entry.value
+        except Exception as e:
+            logger.error(f"Error reading from Redis cache: {e}")
+            return None
 
     async def set(
         self,
@@ -34,16 +33,44 @@ class CacheService:
         value: Any,
         ttl_seconds: int = CachePolicy.DEFAULT_TTL_SECONDS,
     ) -> None:
-        now = time.time()
-        self._store[key] = CacheEntry(
-            key=key, value=value, created_at=now, expires_at=now + ttl_seconds
-        )
+        client = await redis_client.get_client()
+        if not client:
+            logger.warning("Redis client unavailable, bypassing cache SET.")
+            return
+
+        try:
+            val_json = json.dumps(value)
+            await client.set(key, val_json, ex=ttl_seconds)
+        except Exception as e:
+            logger.error(f"Error writing to Redis cache: {e}")
 
     async def invalidate(self, key: str) -> None:
-        self._store.pop(key, None)
+        client = await redis_client.get_client()
+        if not client:
+            return
+        
+        try:
+            await client.delete(key)
+        except Exception as e:
+            logger.error(f"Error invalidating Redis cache key: {e}")
 
     async def clear(self) -> None:
-        self._store.clear()
+        client = await redis_client.get_client()
+        if not client:
+            return
+        
+        try:
+            await client.flushdb()
+        except Exception as e:
+            logger.error(f"Error clearing Redis cache: {e}")
 
     async def get_entry_count(self) -> int:
-        return len(self._store)
+        client = await redis_client.get_client()
+        if not client:
+            return 0
+        
+        try:
+            return await client.dbsize()
+        except Exception as e:
+            logger.error(f"Error getting Redis DB size: {e}")
+            return 0

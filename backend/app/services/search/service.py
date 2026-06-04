@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException
 
-from app.core.cache.keys import CacheCategory, CacheKeyBuilder
+from app.core.cache.cache_keys import CacheCategory, CacheKeyBuilder
 from app.core.cache.manager import cache_manager
 from app.core.logging import get_logger
 from app.schemas.geospatial import Coordinates

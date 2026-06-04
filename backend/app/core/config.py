@@ -25,7 +25,7 @@ class Settings(BaseSettings):
         alias="DATABASE_URL",
     )
     active_provider: str = Field(default="mock", alias="AEGIS_ACTIVE_PROVIDER")
-
+    redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")
 
 @lru_cache
 def get_settings() -> Settings:

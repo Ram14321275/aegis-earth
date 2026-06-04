@@ -23,7 +23,7 @@ class HealthAggregator:
             components["cache"] = ComponentHealth(
                 status=cache_status["status"], 
                 details={
-                    "type": "in-memory",
+                    "type": "redis-backed",
                     "availability": cache_status["availability"],
                     "metrics_summary": cache_status["metrics_summary"]
                 }
@@ -103,6 +103,29 @@ class HealthAggregator:
             )
         except Exception as e:
             components["database"] = ComponentHealth(
+                status="unhealthy", details={"error": str(e)}
+            )
+            overall_status = "degraded"
+
+        # 8. Redis Engine Health
+        try:
+            from app.core.cache.redis_client import redis_client
+            import time
+            start = time.time()
+            ping_ok = await redis_client.ping()
+            latency = (time.time() - start) * 1000
+            
+            if ping_ok:
+                components["redis"] = ComponentHealth(
+                    status="healthy", details={"latency_ms": f"{latency:.2f}"}
+                )
+            else:
+                components["redis"] = ComponentHealth(
+                    status="unhealthy", details={"error": "Ping failed"}
+                )
+                overall_status = "degraded"
+        except Exception as e:
+            components["redis"] = ComponentHealth(
                 status="unhealthy", details={"error": str(e)}
             )
             overall_status = "degraded"

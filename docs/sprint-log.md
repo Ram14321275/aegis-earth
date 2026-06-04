@@ -49,6 +49,11 @@ In progress.
 - Built Frontend Search Experience enabling coordinate mapping, history telemetry tracking, and dynamic location validation integrated into the Dashboard.
 - Built Dashboard MVP bridging Interactive Maps, Data-driven KPI panels, active Risk Summaries, and chronological Alert Streams via asynchronous mock services.
 - Sprint 1 Checkpoints fully accomplished. Stabilized, tested, and audited system boundaries for MVP launch.
+- Sprint 1 Checkpoint 27 completed (Redis & Distributed Cache Foundation).
+- Implemented asynchronous Redis client with connection pooling and health checks.
+- Deployed Redis-backed `DistributedLock` preventing cache stampedes.
+- Migrated legacy coordinate cache keys to normalized spatial tile cache keys.
+- Synchronized detailed Redis metrics (locks, wait times, errors) natively with `/api/v1/system/metrics`.
 
 ### Remaining
 

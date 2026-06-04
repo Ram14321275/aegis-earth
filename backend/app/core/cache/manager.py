@@ -1,6 +1,7 @@
 import asyncio
 from typing import Any, Callable, Optional
 
+from app.core.cache.distributed_lock import DistributedLock
 from app.core.cache.service import CacheService
 from app.observability.metrics import metrics_store
 
@@ -8,14 +9,6 @@ from app.observability.metrics import metrics_store
 class CacheManager:
     def __init__(self):
         self.service = CacheService()
-        self._locks: dict[str, asyncio.Lock] = {}
-        self._lock_lock = asyncio.Lock()
-
-    async def _get_lock(self, key: str) -> asyncio.Lock:
-        async with self._lock_lock:
-            if key not in self._locks:
-                self._locks[key] = asyncio.Lock()
-            return self._locks[key]
 
     async def get_or_fetch(
         self,
@@ -30,8 +23,7 @@ class CacheManager:
             return val, True
 
         # Deduplication slow path
-        lock = await self._get_lock(key)
-        async with lock:
+        async with DistributedLock(key, timeout_ms=10000):
             # Recheck after acquiring lock
             val = await self.service.get(key)
             if val is not None:
