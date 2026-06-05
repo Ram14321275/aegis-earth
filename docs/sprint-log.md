@@ -63,6 +63,11 @@ In progress.
 - Enabled spatial indexing via GiST by integrating `geoalchemy2` Geography types into existing `Location` objects.
 - Developed the `app/core/geospatial` domain to decouple WKT calculations, radius queries, and Polygon bounds checking.
 - Traced `spatial_queries_total` latency dynamically using the singleton `MetricsStore` exposed to `GET /api/v1/system/metrics`.
+- Sprint 1 Checkpoint 31 completed (Satellite Provider Layer).
+- Replaced legacy provider mock architecture with a scalable `app/core/satellite/` domain.
+- Built a dynamic `SatelliteProviderRegistry` and standardized deterministic `MockSentinel` instances returning standardized geometries.
+- Fused satellite fetch requests intimately with `Redis` enabling timeseries temporal cache hits reducing external network loads.
+- Exposed `satellite_requests_total`, cache efficiency metrics, and real-time health checks natively into `/api/v1/system/health`.
 
 ### Remaining
 

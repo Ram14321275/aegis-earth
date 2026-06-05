@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 
 from pydantic import BaseModel
 
@@ -47,6 +47,12 @@ class SpatialMetrics(BaseModel):
     spatial_query_duration_ms: float
     spatial_query_failures_total: int
 
+class SatelliteMetrics(BaseModel):
+    satellite_requests_total: int
+    satellite_cache_hits_total: int
+    satellite_provider_failures_total: int
+    satellite_fetch_duration_ms: float
+
 
 class JobMetrics(BaseModel):
     jobs_created_total: int
@@ -70,6 +76,7 @@ class SystemMetricsResponse(BaseModel):
     visualizations: VisualizationMetrics
     database: DatabaseMetrics
     spatial: SpatialMetrics
+    satellite: SatelliteMetrics
     jobs: JobMetrics
     workers: WorkerMetrics
 
@@ -92,3 +99,4 @@ class SystemHealthResponse(BaseModel):
     jobs: Dict[str, int] = {}
     workers: Dict[str, int] = {}
     postgis: PostGISHealth | None = None
+    satellite: Dict[str, Any] | None = None

@@ -134,6 +134,11 @@
 - Created robust `GeospatialRepository` managing raw spatial queries (`ST_Distance`, `ST_DWithin`, `ST_Intersects`).
 - Established unified `app/core/geospatial` domain capturing WKT generation, calculations, bounding boxes, and Polygon validators.
 - Exposed detailed spatial observability endpoints tracking `spatial_queries_total`, duration ms, and automated `check_postgis_health()`.
+- Sprint 1 Checkpoint 31 completed
+- Deprecated legacy `app/providers/` and architected the formal `app/core/satellite/` domain.
+- Established strict `SatelliteProvider` interfaces with dynamically swappable `SatelliteProviderRegistry`.
+- Built high-performance `SatelliteService` with automated Redis caching for scene and timeseries lookups.
+- Configured dynamic observability, capturing provider latencies and routing `unhealthy` signals directly to the system health aggregator.
 ## Issues
 -
 

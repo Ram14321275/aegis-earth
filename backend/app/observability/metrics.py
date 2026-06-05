@@ -8,6 +8,7 @@ from app.schemas.observability import (
     CacheMetrics,
     DatabaseMetrics,
     SpatialMetrics,
+    SatelliteMetrics,
     SystemMetricsResponse,
     VisualizationMetrics,
     JobMetrics,
@@ -64,6 +65,12 @@ class MetricsStore:
         self.spatial_queries_total = 0
         self.spatial_query_duration_ms = 0.0
         self.spatial_query_failures_total = 0
+        
+        # Satellite
+        self.satellite_requests_total = 0
+        self.satellite_cache_hits_total = 0
+        self.satellite_provider_failures_total = 0
+        self.satellite_fetch_duration_ms = 0.0
 
         # Jobs & Workers
         self.jobs_created_total = 0
@@ -146,6 +153,15 @@ class MetricsStore:
                 self.spatial_query_duration_ms += duration_ms
             else:
                 self.spatial_query_failures_total += 1
+
+    def record_satellite_request(self, cache_hit: bool, success: bool, duration_ms: float):
+        with self._metrics_lock:
+            self.satellite_requests_total += 1
+            if cache_hit:
+                self.satellite_cache_hits_total += 1
+            if not success:
+                self.satellite_provider_failures_total += 1
+            self.satellite_fetch_duration_ms += duration_ms
 
     def record_job_created(self):
         with self._metrics_lock:
@@ -235,6 +251,12 @@ class MetricsStore:
                     spatial_queries_total=self.spatial_queries_total,
                     spatial_query_duration_ms=self.spatial_query_duration_ms,
                     spatial_query_failures_total=self.spatial_query_failures_total,
+                ),
+                satellite=SatelliteMetrics(
+                    satellite_requests_total=self.satellite_requests_total,
+                    satellite_cache_hits_total=self.satellite_cache_hits_total,
+                    satellite_provider_failures_total=self.satellite_provider_failures_total,
+                    satellite_fetch_duration_ms=self.satellite_fetch_duration_ms,
                 ),
                 jobs=JobMetrics(
                     jobs_created_total=self.jobs_created_total,

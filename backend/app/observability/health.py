@@ -2,8 +2,6 @@ from sqlalchemy import text
 
 from app.core.config import get_settings
 from app.db.session import AsyncSessionLocal
-from app.providers.contracts import ProviderConfig, ProviderType
-from app.providers.manager import ProviderManager
 from app.schemas.observability import ComponentHealth, SystemHealthResponse
 
 
@@ -47,22 +45,14 @@ class HealthAggregator:
             )
             overall_status = "degraded"
 
-        # 4. Provider Health
-        # We will use ProviderManager until SatelliteFactory is fully implemented
+        # 4. Satellite Provider Health
         try:
-            settings = get_settings()
-            config = ProviderConfig(provider_type=ProviderType(settings.active_provider))
-            provider = ProviderManager.get_provider(config)
-            
-            # Using synchronous health check status logic since it's a mock MVP for now
-            components["provider"] = ComponentHealth(
-                status="healthy",
-                details={"active_provider": settings.active_provider},
-            )
+            from app.core.satellite.health import get_satellite_system_health
+            satellite_health = await get_satellite_system_health()
+            if satellite_health["unhealthy"] > 0:
+                overall_status = "degraded"
         except Exception as e:
-            components["provider"] = ComponentHealth(
-                status="unhealthy", details={"error": str(e)}
-            )
+            satellite_health = {"error": str(e)}
             overall_status = "degraded"
 
         # 5. Alert Engine Health
@@ -153,5 +143,6 @@ class HealthAggregator:
             components=components,
             jobs=jobs_health,
             workers=workers_health,
-            postgis=postgis_health
+            postgis=postgis_health,
+            satellite=satellite_health
         )

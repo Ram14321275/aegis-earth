@@ -106,7 +106,7 @@ Future disaster intelligence request flow:
 - `observability`: Core telemetry, metrics, and health aggregation tracking system state.
 - `geospatial`: App boundary for robust PostGIS operations via GeoAlchemy2. Handles bounds checking, distance geometry calculations, and strict WKT casting decoupled from specific models.
 - `db`: Database foundation handling async operations with explicit Repository patterns supporting Location, Analysis, Risk, Alerts, and Audit logs.
-- `providers`: abstraction layer standardizing inputs from external satellite networks (Earth Engine, Sentinel).
+- `satellite`: Core abstraction layer bounding all external Satellite Imagery requests (e.g. Sentinel, Earth Engine). Integrates robust Registry mapping, bounding validators, and deterministic Mock providers shielded directly by Redis caching schemas.
 - `alert-engine`: alert generation from hazard signals.
 - `visualization`: map, heat map, and difference map layer descriptors.
 - `geospatial`: coordinate resolution and geospatial normalization.
