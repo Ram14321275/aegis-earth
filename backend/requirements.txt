@@ -10,3 +10,5 @@ alembic>=1.13.0
 greenlet>=3.0.3
 redis>=5.0.0
 geoalchemy2>=0.14.0
+earthengine-api>=0.1.390
+tenacity>=8.2.0

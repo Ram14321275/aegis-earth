@@ -54,6 +54,16 @@ class HealthAggregator:
         except Exception as e:
             satellite_health = {"error": str(e)}
             overall_status = "degraded"
+            
+        # 4.5 GEE Health
+        try:
+            from app.integrations.gee.health import check_gee_health
+            gee_health = await check_gee_health()
+            if gee_health["status"] != "healthy":
+                overall_status = "degraded"
+        except Exception as e:
+            gee_health = {"status": "unhealthy", "error": str(e)}
+            overall_status = "degraded"
 
         # 5. Alert Engine Health
         try:
@@ -144,5 +154,6 @@ class HealthAggregator:
             jobs=jobs_health,
             workers=workers_health,
             postgis=postgis_health,
-            satellite=satellite_health
+            satellite=satellite_health,
+            gee=gee_health
         )

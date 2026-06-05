@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, patch
 from app.core.satellite.models import SatelliteScene, SatelliteTimeseries
 from app.core.geospatial.models import BoundingBox
 from app.core.satellite.registry import SatelliteProviderRegistry
-from app.core.satellite.providers import MockSentinel1Provider, MockSentinel2Provider
+from app.core.satellite.providers.mock_providers import MockSentinel1Provider, MockSentinel2Provider
 from app.core.satellite.service import satellite_service
 from app.core.exceptions import ValidationError
 

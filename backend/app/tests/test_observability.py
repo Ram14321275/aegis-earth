@@ -44,6 +44,7 @@ async def test_health_endpoint():
         assert "cache" in data["components"]
         assert "database" in data["components"]
         assert "satellite" in data
+        assert "gee" in data
 
 
 @pytest.mark.anyio

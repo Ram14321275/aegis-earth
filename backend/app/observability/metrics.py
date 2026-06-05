@@ -9,6 +9,7 @@ from app.schemas.observability import (
     DatabaseMetrics,
     SpatialMetrics,
     SatelliteMetrics,
+    GEEMetrics,
     SystemMetricsResponse,
     VisualizationMetrics,
     JobMetrics,
@@ -71,6 +72,13 @@ class MetricsStore:
         self.satellite_cache_hits_total = 0
         self.satellite_provider_failures_total = 0
         self.satellite_fetch_duration_ms = 0.0
+
+        # GEE
+        self.gee_requests_total = 0
+        self.gee_cache_hits_total = 0
+        self.gee_failures_total = 0
+        self.gee_retry_total = 0
+        self.gee_request_duration_ms = 0.0
 
         # Jobs & Workers
         self.jobs_created_total = 0
@@ -162,6 +170,16 @@ class MetricsStore:
             if not success:
                 self.satellite_provider_failures_total += 1
             self.satellite_fetch_duration_ms += duration_ms
+
+    def record_gee_request(self, cache_hit: bool, success: bool, duration_ms: float, retries: int = 0):
+        with self._metrics_lock:
+            self.gee_requests_total += 1
+            if cache_hit:
+                self.gee_cache_hits_total += 1
+            if not success:
+                self.gee_failures_total += 1
+            self.gee_retry_total += retries
+            self.gee_request_duration_ms += duration_ms
 
     def record_job_created(self):
         with self._metrics_lock:
@@ -257,6 +275,13 @@ class MetricsStore:
                     satellite_cache_hits_total=self.satellite_cache_hits_total,
                     satellite_provider_failures_total=self.satellite_provider_failures_total,
                     satellite_fetch_duration_ms=self.satellite_fetch_duration_ms,
+                ),
+                gee=GEEMetrics(
+                    gee_requests_total=self.gee_requests_total,
+                    gee_cache_hits_total=self.gee_cache_hits_total,
+                    gee_failures_total=self.gee_failures_total,
+                    gee_retry_total=self.gee_retry_total,
+                    gee_request_duration_ms=self.gee_request_duration_ms,
                 ),
                 jobs=JobMetrics(
                     jobs_created_total=self.jobs_created_total,

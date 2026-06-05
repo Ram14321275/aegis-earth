@@ -27,6 +27,10 @@ class Settings(BaseSettings):
     active_provider: str = Field(default="mock", alias="AEGIS_ACTIVE_PROVIDER")
     redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")
 
+    gee_project_id: str | None = Field(default=None, alias="GEE_PROJECT_ID")
+    gee_service_account: str | None = Field(default=None, alias="GEE_SERVICE_ACCOUNT")
+    gee_private_key_path: str | None = Field(default=None, alias="GEE_PRIVATE_KEY_PATH")
+
 @lru_cache
 def get_settings() -> Settings:
     return Settings()

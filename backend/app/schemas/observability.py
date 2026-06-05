@@ -47,6 +47,13 @@ class SpatialMetrics(BaseModel):
     spatial_query_duration_ms: float
     spatial_query_failures_total: int
 
+class GEEMetrics(BaseModel):
+    gee_requests_total: int
+    gee_cache_hits_total: int
+    gee_failures_total: int
+    gee_retry_total: int
+    gee_request_duration_ms: float
+
 class SatelliteMetrics(BaseModel):
     satellite_requests_total: int
     satellite_cache_hits_total: int
@@ -77,6 +84,7 @@ class SystemMetricsResponse(BaseModel):
     database: DatabaseMetrics
     spatial: SpatialMetrics
     satellite: SatelliteMetrics
+    gee: GEEMetrics
     jobs: JobMetrics
     workers: WorkerMetrics
 
@@ -100,3 +108,4 @@ class SystemHealthResponse(BaseModel):
     workers: Dict[str, int] = {}
     postgis: PostGISHealth | None = None
     satellite: Dict[str, Any] | None = None
+    gee: Dict[str, Any] | None = None
