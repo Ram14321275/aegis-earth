@@ -59,6 +59,10 @@ In progress.
 - Introduced `AnalysisJob` entity mapping strict status lifecycles from `QUEUED` to `COMPLETED`/`FAILED`.
 - Engineered a scalable Background Worker Executor bounding worker lifetimes to the FastAPI loop and polling an abstract Queue interface.
 - Developed the `WorkerScheduler` enabling automated health checks, offline purges, and automated retry mechanisms on transient failure states.
+- Sprint 1 Checkpoint 30 completed (PostGIS Foundation).
+- Enabled spatial indexing via GiST by integrating `geoalchemy2` Geography types into existing `Location` objects.
+- Developed the `app/core/geospatial` domain to decouple WKT calculations, radius queries, and Polygon bounds checking.
+- Traced `spatial_queries_total` latency dynamically using the singleton `MetricsStore` exposed to `GET /api/v1/system/metrics`.
 
 ### Remaining
 

@@ -7,6 +7,7 @@ from app.schemas.observability import (
     APIMetrics,
     CacheMetrics,
     DatabaseMetrics,
+    SpatialMetrics,
     SystemMetricsResponse,
     VisualizationMetrics,
     JobMetrics,
@@ -58,6 +59,11 @@ class MetricsStore:
         self.db_queries_total = 0
         self.db_query_duration_ms = 0.0
         self.db_failures_total = 0
+
+        # Spatial
+        self.spatial_queries_total = 0
+        self.spatial_query_duration_ms = 0.0
+        self.spatial_query_failures_total = 0
 
         # Jobs & Workers
         self.jobs_created_total = 0
@@ -132,6 +138,14 @@ class MetricsStore:
                 self.db_query_duration_ms += duration_ms
             else:
                 self.db_failures_total += 1
+
+    def record_spatial_query(self, duration_ms: float, success: bool = True):
+        with self._metrics_lock:
+            self.spatial_queries_total += 1
+            if success:
+                self.spatial_query_duration_ms += duration_ms
+            else:
+                self.spatial_query_failures_total += 1
 
     def record_job_created(self):
         with self._metrics_lock:
@@ -216,6 +230,11 @@ class MetricsStore:
                     queries_total=self.db_queries_total,
                     query_duration_ms=self.db_query_duration_ms,
                     failures_total=self.db_failures_total,
+                ),
+                spatial=SpatialMetrics(
+                    spatial_queries_total=self.spatial_queries_total,
+                    spatial_query_duration_ms=self.spatial_query_duration_ms,
+                    spatial_query_failures_total=self.spatial_query_failures_total,
                 ),
                 jobs=JobMetrics(
                     jobs_created_total=self.jobs_created_total,

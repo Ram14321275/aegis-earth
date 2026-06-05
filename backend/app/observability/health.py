@@ -142,9 +142,16 @@ class HealthAggregator:
         # Wire running jobs count dynamically from busy workers
         jobs_health["running"] = workers_health["busy"]
 
+        from app.core.geospatial.health import check_postgis_health
+        postgis_health = await check_postgis_health()
+        
+        if postgis_health.get("status") != "healthy":
+            overall_status = "degraded"
+
         return SystemHealthResponse(
             status=overall_status, 
             components=components,
             jobs=jobs_health,
-            workers=workers_health
+            workers=workers_health,
+            postgis=postgis_health
         )

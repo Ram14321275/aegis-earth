@@ -104,8 +104,8 @@ Future disaster intelligence request flow:
 - `core/workers`: Background Worker Architecture bound to the FastAPI lifecycle, processing queued jobs robustly with automatic retry recovery and offline purges via the Scheduler.
 - `core/risk`: Standardized risk engine scoring hazards dynamically through threshold-driven rule configurations.
 - `observability`: Core telemetry, metrics, and health aggregation tracking system state.
-- `geospatial`: boundary for Earth Engine / standard mapping APIs.
-- `db`: pure persistence layer isolated from business logic using the Repository Pattern.
+- `geospatial`: App boundary for robust PostGIS operations via GeoAlchemy2. Handles bounds checking, distance geometry calculations, and strict WKT casting decoupled from specific models.
+- `db`: Database foundation handling async operations with explicit Repository patterns supporting Location, Analysis, Risk, Alerts, and Audit logs.
 - `providers`: abstraction layer standardizing inputs from external satellite networks (Earth Engine, Sentinel).
 - `alert-engine`: alert generation from hazard signals.
 - `visualization`: map, heat map, and difference map layer descriptors.

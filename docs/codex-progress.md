@@ -128,6 +128,12 @@
 - Engineered the Background Worker architecture bound directly to the FastAPI lifespan lifecycle via autonomous `WorkerExecutor` tasks.
 - Built a native `WorkerScheduler` system maintaining an automated heartbeat resolving offline instances and enforcing retry caps.
 - Plumbed deep observability into `MetricsStore` tracing `jobs_completed_total` and `workers_active_total` natively over `/api/v1/system/metrics`.
+- Sprint 1 Checkpoint 30 completed
+- Integrated PostGIS spatial database extension and `geoalchemy2`.
+- Migrated legacy `Location` models to strictly mapped `Geography(geometry_type='POINT', srid=4326)` entities with GiST indexing.
+- Created robust `GeospatialRepository` managing raw spatial queries (`ST_Distance`, `ST_DWithin`, `ST_Intersects`).
+- Established unified `app/core/geospatial` domain capturing WKT generation, calculations, bounding boxes, and Polygon validators.
+- Exposed detailed spatial observability endpoints tracking `spatial_queries_total`, duration ms, and automated `check_postgis_health()`.
 ## Issues
 -
 

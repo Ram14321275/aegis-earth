@@ -42,6 +42,11 @@ class DatabaseMetrics(BaseModel):
     query_duration_ms: float
     failures_total: int
 
+class SpatialMetrics(BaseModel):
+    spatial_queries_total: int
+    spatial_query_duration_ms: float
+    spatial_query_failures_total: int
+
 
 class JobMetrics(BaseModel):
     jobs_created_total: int
@@ -64,6 +69,7 @@ class SystemMetricsResponse(BaseModel):
     alerts: AlertMetrics
     visualizations: VisualizationMetrics
     database: DatabaseMetrics
+    spatial: SpatialMetrics
     jobs: JobMetrics
     workers: WorkerMetrics
 
@@ -73,8 +79,16 @@ class ComponentHealth(BaseModel):
     details: Dict[str, str] = {}
 
 
+class PostGISHealth(BaseModel):
+    status: str
+    version: str | None = None
+    spatial_indexes: bool
+    error: str | None = None
+
+
 class SystemHealthResponse(BaseModel):
     status: str
     components: Dict[str, ComponentHealth]
     jobs: Dict[str, int] = {}
     workers: Dict[str, int] = {}
+    postgis: PostGISHealth | None = None
