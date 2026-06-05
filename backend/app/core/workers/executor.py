@@ -10,6 +10,8 @@ from app.core.workers.models import WorkerStatus
 from app.core.workers.heartbeat import HeartbeatSystem
 from app.db.session import AsyncSessionLocal
 from app.observability.metrics import metrics_store
+from app.core.processing.pipeline import sentinel_processing_pipeline
+from app.core.satellite.service import satellite_service
 
 
 class WorkerExecutor:
@@ -78,7 +80,25 @@ class WorkerExecutor:
                 )
                 
                 # Mock heavy processing
-                await asyncio.sleep(2.0)
+                job_db = await job_service.get_job(session, job_id)
+                
+                if job_db.analysis_type == "PROCESS_SENTINEL":
+                    provider_id = job_db.metadata_data.get("provider_id")
+                    scene_id = job_db.metadata_data.get("scene_id")
+                    
+                    if not provider_id or not scene_id:
+                        raise ValueError("Missing provider_id or scene_id in metadata_data")
+                        
+                    # Fetch Scene
+                    scene = await satellite_service.fetch_scene(provider_id, scene_id)
+                    
+                    # Process Scene
+                    result = await sentinel_processing_pipeline.process_scene(scene)
+                    
+                    if not result.success:
+                        raise RuntimeError(f"Processing failed: {result.error_message}")
+                else:
+                    await asyncio.sleep(2.0)
                 
                 execution_time_ms = (time.time() - start_time) * 1000
                 metrics_store.record_worker_execution(execution_time_ms)

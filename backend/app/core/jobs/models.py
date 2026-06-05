@@ -22,6 +22,7 @@ from pydantic import BaseModel, Field, ConfigDict
 
 class JobResponse(BaseModel):
     job_id: str
+    analysis_type: str
     status: JobStatus
     progress_percent: float
     created_at: datetime
@@ -30,5 +31,6 @@ class JobResponse(BaseModel):
     completed_at: Optional[datetime] = None
     error_message: Optional[str] = None
     retry_count: int = 0
+    metadata_data: Optional[Dict[str, Any]] = None
     
     model_config = ConfigDict(from_attributes=True)

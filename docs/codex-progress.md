@@ -144,6 +144,12 @@
 - Implemented `GoogleEarthEngineProvider` adhering to `SatelliteProvider` interface with asynchronous `to_thread` translation.
 - Structured robust rate limiting using `tenacity` exponential backoffs and a custom `gee_circuit_breaker`.
 - Mapped Sentinel-1 (`COPERNICUS/S1_GRD`) and Sentinel-2 (`COPERNICUS/S2_SR_HARMONIZED`) natively into `SatelliteScene` geometry formats.
+- Sprint 1 Checkpoint 33 completed (Sentinel Processing Pipeline)
+- Architected the `app/core/processing/` domain transforming raw `SatelliteScene` objects into `AnalysisReadyDataset` structures.
+- Built Sentinel-1 pipeline enabling programmatic abstractions for Radiometric Calibration, Speckle Noise Reduction (Lee/Gamma MAP), and Terrain Correction.
+- Built Sentinel-2 pipeline automating Cloud Masking (QA60), Cloud Shadow Removal, and native Spectral Index generation (NDVI, NDWI, NBR).
+- Engineered the `SentinelProcessingPipeline` orchestrator dynamically routing satellite formats to dedicated GEE analytical implementations.
+- Refactored `WorkerExecutor` resolving autonomous background data ingestion loops mapping `PROCESS_SENTINEL` job requests natively.
 ## Issues
 -
 

@@ -65,8 +65,16 @@ class JobMetrics(BaseModel):
     jobs_created_total: int
     jobs_completed_total: int
     jobs_failed_total: int
-    jobs_retried_total: int
+    jobs_cancelled_total: int
     queue_depth: int
+
+class ProcessingMetrics(BaseModel):
+    processing_jobs_total: int
+    processing_failures_total: int
+    processing_duration_ms: float
+    sentinel1_processed_total: int
+    sentinel2_processed_total: int
+    indices_generated_total: int
 
 
 class WorkerMetrics(BaseModel):
@@ -85,6 +93,7 @@ class SystemMetricsResponse(BaseModel):
     spatial: SpatialMetrics
     satellite: SatelliteMetrics
     gee: GEEMetrics
+    processing: ProcessingMetrics
     jobs: JobMetrics
     workers: WorkerMetrics
 
@@ -109,3 +118,4 @@ class SystemHealthResponse(BaseModel):
     postgis: PostGISHealth | None = None
     satellite: Dict[str, Any] | None = None
     gee: Dict[str, Any] | None = None
+    processing: Dict[str, Any] | None = None

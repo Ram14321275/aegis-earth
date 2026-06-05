@@ -10,6 +10,7 @@ from app.schemas.observability import (
     SpatialMetrics,
     SatelliteMetrics,
     GEEMetrics,
+    ProcessingMetrics,
     SystemMetricsResponse,
     VisualizationMetrics,
     JobMetrics,
@@ -85,10 +86,21 @@ class MetricsStore:
         self.jobs_completed_total = 0
         self.jobs_failed_total = 0
         self.jobs_retried_total = 0
+        self.jobs_cancelled_total = 0
         self.queue_depth = 0
+        self.job_queue_depth = 0
         self.workers_active_total = 0
         self.worker_failures_total = 0
         self.worker_execution_time_ms = 0.0
+        self.worker_execution_duration_ms = 0.0
+
+        # Processing
+        self.processing_jobs_total = 0
+        self.processing_failures_total = 0
+        self.processing_duration_ms = 0.0
+        self.sentinel1_processed_total = 0
+        self.sentinel2_processed_total = 0
+        self.indices_generated_total = 0
 
         self._metrics_lock = threading.Lock()
 
@@ -185,6 +197,31 @@ class MetricsStore:
         with self._metrics_lock:
             self.jobs_created_total += 1
 
+    def record_processing_job_started(self):
+        with self._metrics_lock:
+            self.processing_jobs_total += 1
+
+    def record_processing_job_completed(self, duration_ms: float):
+        with self._metrics_lock:
+            self.processing_duration_ms += duration_ms
+
+    def record_processing_failure(self, duration_ms: float):
+        with self._metrics_lock:
+            self.processing_failures_total += 1
+            self.processing_duration_ms += duration_ms
+
+    def record_sentinel1_processed(self):
+        with self._metrics_lock:
+            self.sentinel1_processed_total += 1
+
+    def record_sentinel2_processed(self):
+        with self._metrics_lock:
+            self.sentinel2_processed_total += 1
+
+    def record_indices_generated(self, count: int):
+        with self._metrics_lock:
+            self.indices_generated_total += count
+
     def record_job_completed(self):
         with self._metrics_lock:
             self.jobs_completed_total += 1
@@ -211,6 +248,7 @@ class MetricsStore:
 
     def record_worker_execution(self, duration_ms: float):
         with self._metrics_lock:
+            self.worker_execution_duration_ms += duration_ms
             self.worker_execution_time_ms += duration_ms
 
     def get_metrics(self) -> SystemMetricsResponse:
@@ -283,18 +321,26 @@ class MetricsStore:
                     gee_retry_total=self.gee_retry_total,
                     gee_request_duration_ms=self.gee_request_duration_ms,
                 ),
+                processing=ProcessingMetrics(
+                    processing_jobs_total=self.processing_jobs_total,
+                    processing_failures_total=self.processing_failures_total,
+                    processing_duration_ms=self.processing_duration_ms,
+                    sentinel1_processed_total=self.sentinel1_processed_total,
+                    sentinel2_processed_total=self.sentinel2_processed_total,
+                    indices_generated_total=self.indices_generated_total,
+                ),
                 jobs=JobMetrics(
                     jobs_created_total=self.jobs_created_total,
                     jobs_completed_total=self.jobs_completed_total,
                     jobs_failed_total=self.jobs_failed_total,
-                    jobs_retried_total=self.jobs_retried_total,
+                    jobs_cancelled_total=self.jobs_cancelled_total,
                     queue_depth=self.queue_depth,
                 ),
                 workers=WorkerMetrics(
                     workers_active_total=self.workers_active_total,
                     worker_failures_total=self.worker_failures_total,
                     worker_execution_time_ms=self.worker_execution_time_ms,
-                )
+                ),
             )
 
 

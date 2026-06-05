@@ -105,6 +105,7 @@ class JobService:
     def _to_response(self, db_job: AnalysisJob) -> JobResponse:
         return JobResponse(
             job_id=db_job.job_id,
+            analysis_type=db_job.analysis_type,
             status=JobStatus(db_job.status),
             progress_percent=db_job.progress_percent,
             created_at=db_job.created_at,
@@ -112,7 +113,8 @@ class JobService:
             started_at=db_job.started_at,
             completed_at=db_job.completed_at,
             error_message=db_job.error_message,
-            retry_count=db_job.retry_count
+            retry_count=db_job.retry_count,
+            metadata_data=db_job.metadata_data
         )
 
 job_service = JobService()

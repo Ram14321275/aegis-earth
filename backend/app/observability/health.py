@@ -64,6 +64,16 @@ class HealthAggregator:
         except Exception as e:
             gee_health = {"status": "unhealthy", "error": str(e)}
             overall_status = "degraded"
+            
+        # 4.6 Processing Health
+        try:
+            from app.core.processing.health import check_processing_health
+            processing_health = check_processing_health()
+            if processing_health["status"] != "healthy":
+                overall_status = "degraded"
+        except Exception as e:
+            processing_health = {"status": "unhealthy", "error": str(e)}
+            overall_status = "degraded"
 
         # 5. Alert Engine Health
         try:
@@ -155,5 +165,6 @@ class HealthAggregator:
             workers=workers_health,
             postgis=postgis_health,
             satellite=satellite_health,
-            gee=gee_health
+            gee=gee_health,
+            processing=processing_health
         )
