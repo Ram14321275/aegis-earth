@@ -12,6 +12,8 @@ from app.db.session import AsyncSessionLocal
 from app.observability.metrics import metrics_store
 from app.core.processing.pipeline import sentinel_processing_pipeline
 from app.core.satellite.service import satellite_service
+from app.core.analysis.flood.service import flood_engine_service
+from app.core.processing.cache import processing_cache
 
 
 class WorkerExecutor:
@@ -97,6 +99,36 @@ class WorkerExecutor:
                     
                     if not result.success:
                         raise RuntimeError(f"Processing failed: {result.error_message}")
+                elif job_db.analysis_type == "ANALYZE_FLOOD":
+                    provider_id = job_db.metadata_data.get("provider_id")
+                    scene_id = job_db.metadata_data.get("scene_id")
+                    location_id = job_db.location_id
+                    
+                    if not provider_id or not scene_id:
+                        raise ValueError("Missing provider_id or scene_id in metadata_data")
+                        
+                    # 1. Fetch current scene
+                    current_scene = await satellite_service.fetch_scene(provider_id, scene_id)
+                    
+                    # 2. Get ARD from cache or pipeline
+                    ard = await processing_cache.get_ard(scene_id)
+                    if not ard:
+                        proc_result = await sentinel_processing_pipeline.process_scene(current_scene)
+                        if not proc_result.success:
+                            raise RuntimeError(f"Failed to generate ARD for flood analysis: {proc_result.error_message}")
+                        ard = proc_result.ard
+                        
+                    # 3. Flood Engine
+                    assessment = await flood_engine_service.analyze(current_scene, ard, location_id)
+                    
+                    # 4. Cache Results (12h TTL)
+                    # We can use the existing cache_manager
+                    from app.core.cache.manager import cache_manager
+                    await cache_manager.set(
+                        f"flood:assessment:{scene_id}", 
+                        assessment.model_dump_json(),
+                        ttl=43200
+                    )
                 else:
                     await asyncio.sleep(2.0)
                 

@@ -15,6 +15,7 @@ from app.schemas.observability import (
     VisualizationMetrics,
     JobMetrics,
     WorkerMetrics,
+    FloodMetrics,
 )
 
 
@@ -101,6 +102,14 @@ class MetricsStore:
         self.sentinel1_processed_total = 0
         self.sentinel2_processed_total = 0
         self.indices_generated_total = 0
+
+        # Flood
+        self.flood_analyses_total = 0
+        self.flood_detections_total = 0
+        self.flood_detection_duration_ms = 0.0
+        self.flood_high_risk_total = 0
+        self.flood_critical_total = 0
+        self.baseline_cache_hits_total = 0
 
         self._metrics_lock = threading.Lock()
 
@@ -251,6 +260,32 @@ class MetricsStore:
             self.worker_execution_duration_ms += duration_ms
             self.worker_execution_time_ms += duration_ms
 
+    def record_processing_completed(self, duration_ms: float, is_s1: bool, is_s2: bool, indices_count: int):
+        with self._metrics_lock:
+            self.processing_duration_ms += duration_ms
+            if is_s1:
+                self.sentinel1_processed_total += 1
+            if is_s2:
+                self.sentinel2_processed_total += 1
+            self.indices_generated_total += indices_count
+
+    def record_baseline_cache_hit(self):
+        with self._metrics_lock:
+            self.baseline_cache_hits_total += 1
+
+    def record_flood_analysis_started(self):
+        with self._metrics_lock:
+            self.flood_analyses_total += 1
+
+    def record_flood_analysis_completed(self, duration_ms: float, risk_level: str):
+        with self._metrics_lock:
+            self.flood_detection_duration_ms += duration_ms
+            self.flood_detections_total += 1
+            if risk_level == "HIGH":
+                self.flood_high_risk_total += 1
+            elif risk_level == "CRITICAL":
+                self.flood_critical_total += 1
+
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
             avg_latency = (
@@ -340,6 +375,14 @@ class MetricsStore:
                     workers_active_total=self.workers_active_total,
                     worker_failures_total=self.worker_failures_total,
                     worker_execution_time_ms=self.worker_execution_time_ms,
+                ),
+                flood=FloodMetrics(
+                    flood_analyses_total=self.flood_analyses_total,
+                    flood_detections_total=self.flood_detections_total,
+                    flood_detection_duration_ms=self.flood_detection_duration_ms,
+                    flood_high_risk_total=self.flood_high_risk_total,
+                    flood_critical_total=self.flood_critical_total,
+                    baseline_cache_hits_total=self.baseline_cache_hits_total,
                 ),
             )
 

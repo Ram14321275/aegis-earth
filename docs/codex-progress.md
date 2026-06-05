@@ -150,6 +150,12 @@
 - Built Sentinel-2 pipeline automating Cloud Masking (QA60), Cloud Shadow Removal, and native Spectral Index generation (NDVI, NDWI, NBR).
 - Engineered the `SentinelProcessingPipeline` orchestrator dynamically routing satellite formats to dedicated GEE analytical implementations.
 - Refactored `WorkerExecutor` resolving autonomous background data ingestion loops mapping `PROCESS_SENTINEL` job requests natively.
+- Sprint 1 Checkpoint 34 completed (Flood Detection Engine)
+- Engineered the `app/core/analysis/flood/` domain transforming ARD optical/SAR matrices into deterministic `FloodAssessment` records.
+- Built mathematical abstraction layers utilizing GEE expressions for `WaterDetector` (NDWI, VV backscatter mapping).
+- Architected `BaselineRetrievalService` querying trailing 30-day windows to establish historic pre-flood baselines cleanly mapped against `ChangeDetector` delta reductions.
+- Implemented heuristic `RiskScorer` deriving dynamic confidence levels (LOW, MODERATE, HIGH, CRITICAL) strictly from relative newly-inundated areas.
+- Exposed GeoJSON `FloodPolygon` boundaries directly mapped to the UI, while syncing latency to `/api/v1/system/metrics` under `flood_detection_duration_ms`.
 ## Issues
 -
 

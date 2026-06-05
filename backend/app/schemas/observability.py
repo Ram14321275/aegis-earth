@@ -76,6 +76,14 @@ class ProcessingMetrics(BaseModel):
     sentinel2_processed_total: int
     indices_generated_total: int
 
+class FloodMetrics(BaseModel):
+    flood_analyses_total: int
+    flood_detections_total: int
+    flood_detection_duration_ms: float
+    flood_high_risk_total: int
+    flood_critical_total: int
+    baseline_cache_hits_total: int
+
 
 class WorkerMetrics(BaseModel):
     workers_active_total: int
@@ -96,6 +104,7 @@ class SystemMetricsResponse(BaseModel):
     processing: ProcessingMetrics
     jobs: JobMetrics
     workers: WorkerMetrics
+    flood: FloodMetrics
 
 
 class ComponentHealth(BaseModel):
@@ -119,3 +128,4 @@ class SystemHealthResponse(BaseModel):
     satellite: Dict[str, Any] | None = None
     gee: Dict[str, Any] | None = None
     processing: Dict[str, Any] | None = None
+    flood_engine: Dict[str, Any] | None = None

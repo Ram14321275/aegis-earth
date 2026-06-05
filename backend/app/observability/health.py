@@ -67,12 +67,18 @@ class HealthAggregator:
             
         # 4.6 Processing Health
         try:
+            from app.core.satellite.service import satellite_service
             from app.core.processing.health import check_processing_health
+            from app.core.analysis.flood.health import check_flood_engine_health
             processing_health = check_processing_health()
+            flood_health = check_flood_engine_health()
             if processing_health["status"] != "healthy":
+                overall_status = "degraded"
+            if flood_health["status"] != "healthy":
                 overall_status = "degraded"
         except Exception as e:
             processing_health = {"status": "unhealthy", "error": str(e)}
+            flood_health = {"status": "unhealthy", "error": str(e)}
             overall_status = "degraded"
 
         # 5. Alert Engine Health
@@ -155,16 +161,20 @@ class HealthAggregator:
         from app.core.geospatial.health import check_postgis_health
         postgis_health = await check_postgis_health()
         
-        if postgis_health.get("status") != "healthy":
-            overall_status = "degraded"
-
+        system_status = overall_status
+        if processing_health.get("status") != "healthy":
+            system_status = "degraded"
+        if flood_health.get("status") != "healthy":
+            system_status = "degraded"
+            
         return SystemHealthResponse(
-            status=overall_status, 
+            status=system_status, 
             components=components,
             jobs=jobs_health,
             workers=workers_health,
-            postgis=postgis_health,
+            postgis=PostGISHealth(**postgis_health) if postgis_health else None,
             satellite=satellite_health,
             gee=gee_health,
-            processing=processing_health
+            processing=processing_health,
+            flood_engine=flood_health
         )
