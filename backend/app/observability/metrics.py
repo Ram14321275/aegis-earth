@@ -21,6 +21,7 @@ from app.schemas.observability import (
     IntelligenceMetrics,
     StreamingMetrics,
     FusionMetrics,
+    GatewayMetrics,
 )
 
 
@@ -164,6 +165,13 @@ class MetricsStore:
         self.cascading_events_detected = 0
         self.regional_aggregation_duration_ms = 0.0
         self.fusion_processing_duration_ms = 0.0
+
+        # Gateway
+        self.federated_requests_total = 0
+        self.coalesced_requests_total = 0
+        self.provider_timeout_total = 0
+        self.degraded_responses_total = 0
+        self.websocket_broadcast_latency_ms = 0.0
 
         self._metrics_lock = threading.Lock()
 
@@ -482,6 +490,26 @@ class MetricsStore:
         with self._metrics_lock:
             self.regional_aggregation_duration_ms += duration_ms
 
+    def record_federated_request(self):
+        with self._metrics_lock:
+            self.federated_requests_total += 1
+
+    def record_coalesced_request(self):
+        with self._metrics_lock:
+            self.coalesced_requests_total += 1
+
+    def record_provider_timeout(self):
+        with self._metrics_lock:
+            self.provider_timeout_total += 1
+
+    def record_degraded_response(self):
+        with self._metrics_lock:
+            self.degraded_responses_total += 1
+
+    def record_websocket_broadcast_latency(self, latency_ms: float):
+        with self._metrics_lock:
+            self.websocket_broadcast_latency_ms += latency_ms
+
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
             avg_latency = (
@@ -628,6 +656,13 @@ class MetricsStore:
                     cascading_events_detected=self.cascading_events_detected,
                     regional_aggregation_duration_ms=self.regional_aggregation_duration_ms,
                     fusion_processing_duration_ms=self.fusion_processing_duration_ms,
+                ),
+                gateway=GatewayMetrics(
+                    federated_requests_total=self.federated_requests_total,
+                    coalesced_requests_total=self.coalesced_requests_total,
+                    provider_timeout_total=self.provider_timeout_total,
+                    degraded_responses_total=self.degraded_responses_total,
+                    websocket_broadcast_latency_ms=self.websocket_broadcast_latency_ms,
                 )
             )
 

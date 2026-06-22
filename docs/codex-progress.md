@@ -261,3 +261,12 @@
 - Programmed deep Continuous Integration/Deployment pipelines via GitHub Actions (`ci.yml`, `cd.yml`) executing static analysis (Bandit), dependency audits, vulnerability scans (Trivy), and automated release deployment flows into GHCR.
 - Written comprehensive `docs/disaster-recovery.md` bounding database backups, PITR recovery, Redis AOF persistence strategies, and deterministic rollback constraints.
 - Generated `docs/architecture-topology.md` detailing operational dataflows from Ingress down to external Satellite Provider interactions.
+## Checkpoint 45: Global Intelligence API Gateway & Public SDK Layer
+- Established the `backend/app/gateway/` domain to act as the single official entry point for all internal intelligence engines.
+- Authored strictly versioned `IntelligenceSnapshot` public contracts ensuring absolute data structure parity between REST endpoints and WebSocket feeds.
+- Engineered a Redis-backed `RequestCoalescer` providing in-flight request deduplication via SHA-256 fingerprinting and Pub/Sub futures, preventing downstream Thundering Herd loads.
+- Implemented an `asyncio` Federation Engine integrating `CircuitBreaker` states for strict per-engine timeouts and graceful partial response degradation without compromising the overall request.
+- Deployed sliding-window API Rate Limiting enforcing tenant-aware and API-Key quotas with graceful HTTP 429 envelopes.
+- Upgraded the `CacheService` to inject Adaptive TTL policies mapping Hazard Severity levels to dynamic retention periods (e.g., 10m for Critical vs 6h for Low).
+- Created `sdk/generate.sh` automating Python and TypeScript SDK scaffold generation directly from the validated FastAPI OpenAPI schemas.
+- Multiplexed internal Redis stream subscriptions into a unified, rate-limited, backpressure-safe `/ws/v1/intelligence` WebSocket Gateway endpoint.

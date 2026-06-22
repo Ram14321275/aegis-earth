@@ -143,3 +143,12 @@ Future disaster intelligence request flow:
 - **Correlation & Cascading Analysis**: Identifies inter-hazard causal loops (e.g. wildfire scars increasing flood vulnerability) bound strictly by region and temporal cooldown rules.
 - **Operational Prioritization**: Calculates global urgency dynamically factoring active worker queue saturation, avoiding non-critical escalations during planetary-scale system congestion.
 - **Anomaly Protection**: Deterministically suppresses impossible intelligence jumps and sudden confidence collapses, guaranteeing operational stability.
+
+## Global Intelligence API Gateway & Federation
+- **Unified Query API**: Centralized endpoint (`POST /api/v1/intelligence/query`) abstracting all internal engines via `gateway/router.py`.
+- **Request Coalescer**: Thundering herd protection via Redis. Identical in-flight requests are fingerprinted (`tenant+payload+version`), locked, and multiplexed from a single background execution.
+- **Federation Engine**: `asyncio.gather()` orchestration with strict per-engine timeouts and partial degradation via `CircuitBreaker`. Ensures a single failing hazard engine NEVER fails the entire unified response.
+- **Adaptive Cache Policy**: Dynamic TTL scaling driven by hazard severity (e.g., Critical = 10m, Stable = 6h) enforcing fresher data during active crises.
+- **Public Contracts**: Strict, versioned schemas (`IntelligenceSnapshot`, `RegionalSummary`) shared equally between REST and WebSocket interfaces.
+- **SDK Generation**: Automated extraction of OpenAPI schema utilizing `openapi-generator-cli` to scaffold perfectly typed TypeScript and Python clients.
+- **Rate Limiting**: Sliding-window Token Bucket rate limiting via Redis. Supports Tenant, API-Key, and IP level quotas.

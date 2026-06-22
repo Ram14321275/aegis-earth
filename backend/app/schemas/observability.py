@@ -144,6 +144,14 @@ class FusionMetrics(BaseModel):
     fusion_processing_duration_ms: float
 
 
+class GatewayMetrics(BaseModel):
+    federated_requests_total: int
+    coalesced_requests_total: int
+    provider_timeout_total: int
+    degraded_responses_total: int
+    websocket_broadcast_latency_ms: float
+
+
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
     cache: CacheMetrics
@@ -163,6 +171,7 @@ class SystemMetricsResponse(BaseModel):
     intelligence: IntelligenceMetrics
     streaming: StreamingMetrics
     fusion: FusionMetrics
+    gateway: GatewayMetrics
 
 
 class ComponentHealth(BaseModel):
