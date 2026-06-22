@@ -1,0 +1,66 @@
+# Default values for aegis-earth.
+
+environment: "development"
+
+backend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/aegis-earth/backend
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  hpa:
+    enabled: false
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 75
+  pdb:
+    enabled: false
+    minAvailable: 1
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/aegis-earth/frontend
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  hpa:
+    enabled: false
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 75
+  pdb:
+    enabled: false
+    minAvailable: 1
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+  hosts:
+    - host: api.aegis-earth.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service: backend
+    - host: aegis-earth.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
