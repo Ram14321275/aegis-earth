@@ -1,10 +1,10 @@
 from sqlalchemy import Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import BaseModel
+from app.db.base import TenantAwareModel
 
 
-class RiskAssessment(BaseModel):
+class RiskAssessment(TenantAwareModel):
     __tablename__ = "risk_assessments"
 
     analysis_id: Mapped[str] = mapped_column(

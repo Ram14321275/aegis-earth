@@ -13,4 +13,3 @@ DEFAULT_SECURITY_HEADERS: Mapping[str, str] = MappingProxyType(
 
 def build_security_headers() -> Mapping[str, str]:
     return DEFAULT_SECURITY_HEADERS
-

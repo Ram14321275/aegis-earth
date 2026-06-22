@@ -92,6 +92,11 @@ Future disaster intelligence request flow:
 - `cache`: TTL-based Redis distributed cache mapping versioned tile keys to intelligence responses, protected by distributed locks.
 - `analysis`: high-level disaster analysis orchestration.
 - `disaster-engine`: flood and wildfire scoring, risk assessment, explainable drivers.
+- `core/analysis/flood`: deterministic flood intelligence engine utilizing Earth Engine.
+- `core/analysis/wildfire`: deterministic wildfire intelligence engine utilizing Earth Engine.
+- `core/analysis/change_detection`: historical multi-timeframe environmental intelligence engine tracking vegetation, water, urban, and burn changes.
+- `core/intelligence`: Unified planetary intelligence orchestration layer handling cross-hazard correlation, AI explainability generation, and event prioritization.
+- `core/streaming`: Real-Time Intelligence Streaming Layer bridging internal Pub/Sub events safely to connected WebSocket Gateways with backpressure and subscription limits.
 - `model-interface`: stable contracts for future model replacement.
 - `domain`: Earth observation domain model standardizing hazards and risk scoring logic independent of specific models or APIs.
 - `core/alerts`: Alert intelligence layer generating deterministic situational alerts driven by risk categorization.
@@ -118,3 +123,23 @@ Future disaster intelligence request flow:
 - Request key normalization by rounded coordinates.
 - Lazy frontend map rendering.
 - Background scheduler reserved for provider ingestion and cache warming.
+
+## Security & Multi-Tenancy Architecture
+- **TenantAwareModel**: Enforces global tenant_id partitioning via BaseRepository.
+- **AuthenticationMiddleware**: Decouples auth completely from hazard engines using PyJWT.
+- **RBAC**: Policy-driven role mappings managed internally via contextvars.
+
+## Distributed Processing Architecture
+- **Job Orchestration**: Asynchronous execution via `app/core/jobs/orchestration.py`, resolving APIs to `202 Accepted`.
+- **Deduplication Engine**: Redis `SET NX EX` atomic locking mechanism via request fingerprint hashes (`coordinates|timeframe|hazard_type|versions`).
+- **Idempotency**: Natively resolves `Idempotency-Key` headers to prevent mobile/unstable network retry duplications.
+- **Worker Isolation**: Stateless, async, horizontally scalable workers executing leases with 10-minute timeout enforcement and internal credential validation.
+- **Priority Scheduler**: Queue priorities defined algebraically via weighted severity, population risk, tenant tier SLA, and request urgency heuristics.
+
+## Planetary Intelligence Coordination (Fusion Layer)
+- **Disaster Fusion Engine**: Combines isolated hazards into a unified `RegionalThreatAssessment` utilizing bounded spatial clustering and compound risk amplifiers.
+- **Temporal Consistency Engine**: Mitigates volatile threshold oscillations via independent escalation/de-escalation hysteresis tracking and time-decay weighting.
+- **Reliability Validation**: Calculates explicit confidence bounds without mutating underlying analytical results, penalizing high cloud coverage and provider degradation.
+- **Correlation & Cascading Analysis**: Identifies inter-hazard causal loops (e.g. wildfire scars increasing flood vulnerability) bound strictly by region and temporal cooldown rules.
+- **Operational Prioritization**: Calculates global urgency dynamically factoring active worker queue saturation, avoiding non-critical escalations during planetary-scale system congestion.
+- **Anomaly Protection**: Deterministically suppresses impossible intelligence jumps and sudden confidence collapses, guaranteeing operational stability.

@@ -32,3 +32,9 @@ class BaseModel(Base):
     deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
+
+
+class TenantAwareModel(BaseModel):
+    __abstract__ = True
+
+    tenant_id: Mapped[str] = mapped_column(String, index=True, nullable=False)

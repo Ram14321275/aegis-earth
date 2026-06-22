@@ -8,6 +8,19 @@ from app.core.jobs.manager import job_queue_manager
 from app.core.jobs.service import job_service
 from app.core.jobs.statuses import JobStatus
 
+class MockQueue:
+    def __init__(self):
+        self.q = []
+    async def enqueue(self, qname, payload, priority=0):
+        self.q.append(payload)
+    async def dequeue(self, qname, timeout=0):
+        if self.q: return self.q.pop(0)
+        return None
+    async def get_depth(self, qname):
+        return len(self.q)
+
+job_queue_manager._queue = MockQueue()
+
 @pytest.mark.anyio
 async def test_worker_registration():
     executor = WorkerExecutor("test-worker-1")

@@ -12,6 +12,7 @@ class HazardType(str, Enum):
     WILDFIRE = "wildfire"
     VEGETATION_LOSS = "vegetation_loss"
     URBAN_EXPANSION = "urban_expansion"
+    ENVIRONMENTAL_CHANGE = "environmental_change"
     UNKNOWN = "unknown"
 
 

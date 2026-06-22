@@ -67,6 +67,11 @@ class JobMetrics(BaseModel):
     jobs_failed_total: int
     jobs_cancelled_total: int
     queue_depth: int
+    deduplication_saves_total: int = 0
+    recovered_jobs_total: int = 0
+    stale_job_requeues_total: int = 0
+    idempotency_reuse_total: int = 0
+    queue_wait_duration_ms: float = 0.0
 
 class ProcessingMetrics(BaseModel):
     processing_jobs_total: int
@@ -85,10 +90,58 @@ class FloodMetrics(BaseModel):
     baseline_cache_hits_total: int
 
 
+class WildfireMetrics(BaseModel):
+    wildfire_analyses_total: int
+    wildfire_processing_time_ms: float
+    wildfire_alerts_generated: int
+    wildfire_failures: int
+
+class TemporalMetrics(BaseModel):
+    temporal_analyses_total: int
+    temporal_processing_duration_ms: float
+    change_detection_failures: int
+    temporal_cache_hits: int
+    temporal_queue_depth: int
+    temporal_job_duration_ms: float
+    temporal_scene_fetch_duration_ms: float
+    temporal_geojson_size_bytes: int
+
+
+class IntelligenceMetrics(BaseModel):
+    intelligence_aggregations_total: int
+    correlation_events_total: int
+    explainability_generation_ms: float
+    prioritization_duration_ms: float
+    intelligence_failures: int
+
+
+class StreamingMetrics(BaseModel):
+    active_websocket_connections: int
+    websocket_messages_total: int
+    websocket_disconnects_total: int
+    websocket_queue_overflows_total: int
+    websocket_backpressure_disconnects_total: int
+    pubsub_failures_total: int
+    pubsub_delivery_failures_total: int
+    streaming_latency_ms: float
+    average_event_size_bytes: float
+
+
 class WorkerMetrics(BaseModel):
     workers_active_total: int
     worker_failures_total: int
     worker_execution_time_ms: float
+    worker_utilization_ratio: float = 0.0
+
+
+class FusionMetrics(BaseModel):
+    fusion_operations_total: int
+    escalation_events_total: int
+    anomaly_flags_total: int
+    reliability_degradations_total: int
+    cascading_events_detected: int
+    regional_aggregation_duration_ms: float
+    fusion_processing_duration_ms: float
 
 
 class SystemMetricsResponse(BaseModel):
@@ -105,6 +158,11 @@ class SystemMetricsResponse(BaseModel):
     jobs: JobMetrics
     workers: WorkerMetrics
     flood: FloodMetrics
+    wildfire: WildfireMetrics
+    temporal: TemporalMetrics
+    intelligence: IntelligenceMetrics
+    streaming: StreamingMetrics
+    fusion: FusionMetrics
 
 
 class ComponentHealth(BaseModel):

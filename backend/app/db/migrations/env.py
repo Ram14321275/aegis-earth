@@ -15,6 +15,11 @@ import app.db.models.alert  # noqa
 import app.db.models.audit  # noqa
 import app.db.models.risk  # noqa
 import app.db.models.analysis_job  # noqa
+import app.db.models.tenant  # noqa
+import app.db.models.user  # noqa
+import app.db.models.api_key  # noqa
+import app.db.models.job_tracking  # noqa
+import app.db.models.fusion  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

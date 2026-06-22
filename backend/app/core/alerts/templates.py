@@ -12,12 +12,16 @@ ALERT_TEMPLATES: Dict[str, Dict[str, Dict[str, str]]] = {
         },
     },
     "wildfire": {
+        "MODERATE": {
+            "title": "Wildfire Watch",
+            "message": "Elevated wildfire risk detected. Conditions are favorable for wildfire spread.",
+        },
         "HIGH": {
             "title": "Wildfire Warning",
             "message": "Significant wildfire risk detected.",
         },
         "CRITICAL": {
-            "title": "Emergency Wildfire Alert",
+            "title": "Critical Wildfire Alert",
             "message": "Critical wildfire risk detected. Immediate action may be required.",
         },
     },

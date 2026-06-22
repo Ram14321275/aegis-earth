@@ -16,6 +16,11 @@ from app.schemas.observability import (
     JobMetrics,
     WorkerMetrics,
     FloodMetrics,
+    WildfireMetrics,
+    TemporalMetrics,
+    IntelligenceMetrics,
+    StreamingMetrics,
+    FusionMetrics,
 )
 
 
@@ -90,10 +95,16 @@ class MetricsStore:
         self.jobs_cancelled_total = 0
         self.queue_depth = 0
         self.job_queue_depth = 0
+        self.deduplication_saves_total = 0
+        self.recovered_jobs_total = 0
+        self.stale_job_requeues_total = 0
+        self.idempotency_reuse_total = 0
+        self.queue_wait_duration_ms = 0.0
         self.workers_active_total = 0
         self.worker_failures_total = 0
         self.worker_execution_time_ms = 0.0
         self.worker_execution_duration_ms = 0.0
+        self.worker_utilization_ratio = 0.0
 
         # Processing
         self.processing_jobs_total = 0
@@ -110,6 +121,49 @@ class MetricsStore:
         self.flood_high_risk_total = 0
         self.flood_critical_total = 0
         self.baseline_cache_hits_total = 0
+
+        # Wildfire
+        self.wildfire_analyses_total = 0
+        self.wildfire_processing_time_ms = 0.0
+        self.wildfire_alerts_generated = 0
+        self.wildfire_failures = 0
+        # Temporal
+        self.temporal_analyses_total = 0
+        self.temporal_processing_duration_ms = 0.0
+        self.change_detection_failures = 0
+        self.temporal_cache_hits = 0
+        self.temporal_queue_depth = 0
+        self.temporal_job_duration_ms = 0.0
+        self.temporal_scene_fetch_duration_ms = 0.0
+        self.temporal_geojson_size_bytes = 0
+
+        # Intelligence
+        self.intelligence_aggregations_total = 0
+        self.correlation_events_total = 0
+        self.explainability_generation_ms = 0.0
+        self.prioritization_duration_ms = 0.0
+        self.intelligence_failures = 0
+
+        # Streaming
+        self.active_websocket_connections = 0
+        self.websocket_messages_total = 0
+        self.websocket_disconnects_total = 0
+        self.websocket_queue_overflows_total = 0
+        self.websocket_backpressure_disconnects_total = 0
+        self.pubsub_failures_total = 0
+        self.pubsub_delivery_failures_total = 0
+        self.streaming_latency_ms = 0.0
+        self.streaming_events_total = 0
+        self.streaming_total_size_bytes = 0
+
+        # Fusion
+        self.fusion_operations_total = 0
+        self.escalation_events_total = 0
+        self.anomaly_flags_total = 0
+        self.reliability_degradations_total = 0
+        self.cascading_events_detected = 0
+        self.regional_aggregation_duration_ms = 0.0
+        self.fusion_processing_duration_ms = 0.0
 
         self._metrics_lock = threading.Lock()
 
@@ -242,6 +296,26 @@ class MetricsStore:
     def record_job_retried(self):
         with self._metrics_lock:
             self.jobs_retried_total += 1
+            
+    def record_deduplication_save(self):
+        with self._metrics_lock:
+            self.deduplication_saves_total += 1
+
+    def record_recovered_job(self):
+        with self._metrics_lock:
+            self.recovered_jobs_total += 1
+
+    def record_stale_job_requeue(self):
+        with self._metrics_lock:
+            self.stale_job_requeues_total += 1
+
+    def record_idempotency_reuse(self):
+        with self._metrics_lock:
+            self.idempotency_reuse_total += 1
+            
+    def record_queue_wait(self, duration_ms: float):
+        with self._metrics_lock:
+            self.queue_wait_duration_ms += duration_ms
 
     def update_queue_depth(self, depth: int):
         with self._metrics_lock:
@@ -259,6 +333,10 @@ class MetricsStore:
         with self._metrics_lock:
             self.worker_execution_duration_ms += duration_ms
             self.worker_execution_time_ms += duration_ms
+            
+    def update_worker_utilization(self, ratio: float):
+        with self._metrics_lock:
+            self.worker_utilization_ratio = ratio
 
     def record_processing_completed(self, duration_ms: float, is_s1: bool, is_s2: bool, indices_count: int):
         with self._metrics_lock:
@@ -285,6 +363,124 @@ class MetricsStore:
                 self.flood_high_risk_total += 1
             elif risk_level == "CRITICAL":
                 self.flood_critical_total += 1
+
+    def record_wildfire_analysis_started(self):
+        with self._metrics_lock:
+            self.wildfire_analyses_total += 1
+
+    def record_wildfire_analysis_completed(self, duration_ms: float):
+        with self._metrics_lock:
+            self.wildfire_processing_time_ms += duration_ms
+
+    def record_wildfire_alert_generated(self):
+        with self._metrics_lock:
+            self.wildfire_alerts_generated += 1
+
+    def record_wildfire_failure(self):
+        with self._metrics_lock:
+            self.wildfire_failures += 1
+
+    def record_temporal_analysis(self, duration_ms: float):
+        with self._metrics_lock:
+            self.temporal_analyses_total += 1
+            self.temporal_processing_duration_ms += duration_ms
+
+    def record_temporal_failure(self):
+        with self._metrics_lock:
+            self.change_detection_failures += 1
+
+    def record_temporal_cache_hit(self):
+        with self._metrics_lock:
+            self.temporal_cache_hits += 1
+
+    def update_temporal_queue_depth(self, depth: int):
+        with self._metrics_lock:
+            self.temporal_queue_depth = depth
+
+    def record_temporal_job_duration(self, duration_ms: float):
+        with self._metrics_lock:
+            self.temporal_job_duration_ms += duration_ms
+
+    def record_temporal_scene_fetch(self, duration_ms: float):
+        with self._metrics_lock:
+            self.temporal_scene_fetch_duration_ms += duration_ms
+
+    def record_temporal_geojson_size(self, size_bytes: int):
+        with self._metrics_lock:
+            self.temporal_geojson_size_bytes += size_bytes
+
+    def record_intelligence_aggregation(self):
+        with self._metrics_lock:
+            self.intelligence_aggregations_total += 1
+
+    def record_correlation_event(self, count: int = 1):
+        with self._metrics_lock:
+            self.correlation_events_total += count
+
+    def record_explainability_generation(self, duration_ms: float):
+        with self._metrics_lock:
+            self.explainability_generation_ms += duration_ms
+
+    def record_prioritization_duration(self, duration_ms: float):
+        with self._metrics_lock:
+            self.prioritization_duration_ms += duration_ms
+
+    def record_intelligence_failure(self):
+        with self._metrics_lock:
+            self.intelligence_failures += 1
+
+    def update_active_websocket_connections(self, count: int):
+        with self._metrics_lock:
+            self.active_websocket_connections = count
+            
+    def record_websocket_message(self, size_bytes: int, latency_ms: float = 0.0):
+        with self._metrics_lock:
+            self.websocket_messages_total += 1
+            self.streaming_events_total += 1
+            self.streaming_total_size_bytes += size_bytes
+            self.streaming_latency_ms += latency_ms
+            
+    def record_websocket_disconnect(self, is_backpressure: bool = False):
+        with self._metrics_lock:
+            self.websocket_disconnects_total += 1
+            if is_backpressure:
+                self.websocket_backpressure_disconnects_total += 1
+                
+    def record_websocket_queue_overflow(self):
+        with self._metrics_lock:
+            self.websocket_queue_overflows_total += 1
+            
+    def record_pubsub_failure(self, delivery: bool = False):
+        with self._metrics_lock:
+            self.pubsub_failures_total += 1
+            if delivery:
+                self.pubsub_delivery_failures_total += 1
+
+    # Fusion Tracking
+    def record_fusion_operation(self, duration_ms: float):
+        with self._metrics_lock:
+            self.fusion_operations_total += 1
+            self.fusion_processing_duration_ms += duration_ms
+
+    def record_escalation_event(self):
+        with self._metrics_lock:
+            self.escalation_events_total += 1
+
+    def record_anomaly_flag(self):
+        with self._metrics_lock:
+            self.anomaly_flags_total += 1
+
+    def record_reliability_degradation(self):
+        with self._metrics_lock:
+            self.reliability_degradations_total += 1
+
+    def record_cascading_event(self):
+        with self._metrics_lock:
+            self.cascading_events_detected += 1
+
+    def record_regional_aggregation(self, duration_ms: float):
+        with self._metrics_lock:
+            self.regional_aggregation_duration_ms += duration_ms
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
@@ -370,11 +566,17 @@ class MetricsStore:
                     jobs_failed_total=self.jobs_failed_total,
                     jobs_cancelled_total=self.jobs_cancelled_total,
                     queue_depth=self.queue_depth,
+                    deduplication_saves_total=self.deduplication_saves_total,
+                    recovered_jobs_total=self.recovered_jobs_total,
+                    stale_job_requeues_total=self.stale_job_requeues_total,
+                    idempotency_reuse_total=self.idempotency_reuse_total,
+                    queue_wait_duration_ms=self.queue_wait_duration_ms,
                 ),
                 workers=WorkerMetrics(
                     workers_active_total=self.workers_active_total,
                     worker_failures_total=self.worker_failures_total,
                     worker_execution_time_ms=self.worker_execution_time_ms,
+                    worker_utilization_ratio=self.worker_utilization_ratio,
                 ),
                 flood=FloodMetrics(
                     flood_analyses_total=self.flood_analyses_total,
@@ -384,6 +586,49 @@ class MetricsStore:
                     flood_critical_total=self.flood_critical_total,
                     baseline_cache_hits_total=self.baseline_cache_hits_total,
                 ),
+                wildfire=WildfireMetrics(
+                    wildfire_analyses_total=self.wildfire_analyses_total,
+                    wildfire_processing_time_ms=self.wildfire_processing_time_ms,
+                    wildfire_alerts_generated=self.wildfire_alerts_generated,
+                    wildfire_failures=self.wildfire_failures,
+                ),
+                temporal=TemporalMetrics(
+                    temporal_analyses_total=self.temporal_analyses_total,
+                    temporal_processing_duration_ms=self.temporal_processing_duration_ms,
+                    change_detection_failures=self.change_detection_failures,
+                    temporal_cache_hits=self.temporal_cache_hits,
+                    temporal_queue_depth=self.temporal_queue_depth,
+                    temporal_job_duration_ms=self.temporal_job_duration_ms,
+                    temporal_scene_fetch_duration_ms=self.temporal_scene_fetch_duration_ms,
+                    temporal_geojson_size_bytes=self.temporal_geojson_size_bytes,
+                ),
+                intelligence=IntelligenceMetrics(
+                    intelligence_aggregations_total=self.intelligence_aggregations_total,
+                    correlation_events_total=self.correlation_events_total,
+                    explainability_generation_ms=self.explainability_generation_ms,
+                    prioritization_duration_ms=self.prioritization_duration_ms,
+                    intelligence_failures=self.intelligence_failures,
+                ),
+                streaming=StreamingMetrics(
+                    active_websocket_connections=self.active_websocket_connections,
+                    websocket_messages_total=self.websocket_messages_total,
+                    websocket_disconnects_total=self.websocket_disconnects_total,
+                    websocket_queue_overflows_total=self.websocket_queue_overflows_total,
+                    websocket_backpressure_disconnects_total=self.websocket_backpressure_disconnects_total,
+                    pubsub_failures_total=self.pubsub_failures_total,
+                    pubsub_delivery_failures_total=self.pubsub_delivery_failures_total,
+                    streaming_latency_ms=self.streaming_latency_ms,
+                    average_event_size_bytes=(self.streaming_total_size_bytes / self.streaming_events_total) if self.streaming_events_total > 0 else 0.0,
+                ),
+                fusion=FusionMetrics(
+                    fusion_operations_total=self.fusion_operations_total,
+                    escalation_events_total=self.escalation_events_total,
+                    anomaly_flags_total=self.anomaly_flags_total,
+                    reliability_degradations_total=self.reliability_degradations_total,
+                    cascading_events_detected=self.cascading_events_detected,
+                    regional_aggregation_duration_ms=self.regional_aggregation_duration_ms,
+                    fusion_processing_duration_ms=self.fusion_processing_duration_ms,
+                )
             )
 
 

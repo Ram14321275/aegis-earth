@@ -79,19 +79,19 @@ class JobService:
             db_job.completed_at = now
             db_job.progress_percent = 100.0
             if execution_time_ms:
-                db_job.execution_time_ms = execution_time_ms
+                db_job.execution_duration_ms = execution_time_ms
             metrics_store.record_job_completed()
         elif new_status == JobStatus.FAILED:
             db_job.completed_at = now
             if error_message:
-                db_job.error_message = error_message
+                db_job.failure_reason = error_message
             if execution_time_ms:
-                db_job.execution_time_ms = execution_time_ms
+                db_job.execution_duration_ms = execution_time_ms
             metrics_store.record_job_failed()
         elif new_status == JobStatus.RETRYING:
             db_job.retry_count += 1
             if error_message:
-                db_job.error_message = error_message
+                db_job.failure_reason = error_message
             metrics_store.record_job_retried()
 
         await session.commit()
@@ -112,7 +112,7 @@ class JobService:
             queued_at=db_job.queued_at,
             started_at=db_job.started_at,
             completed_at=db_job.completed_at,
-            error_message=db_job.error_message,
+            error_message=db_job.failure_reason,
             retry_count=db_job.retry_count,
             metadata_data=db_job.metadata_data
         )

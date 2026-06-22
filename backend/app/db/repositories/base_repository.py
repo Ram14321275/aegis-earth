@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.base import Base
 from app.observability.metrics import metrics_store
+from app.core.security.tenants import get_current_tenant_id
 
 ModelType = TypeVar("ModelType", bound=Base)
 
@@ -14,12 +15,19 @@ class BaseRepository(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
+    def _get_base_query(self):
+        query = select(self.model)
+        if hasattr(self.model, "tenant_id"):
+            tenant_id = get_current_tenant_id()
+            if tenant_id:
+                query = query.filter(self.model.tenant_id == tenant_id)
+        return query
+
     async def get(self, session: AsyncSession, id: Any) -> Optional[ModelType]:
         start = time.time()
         try:
-            result = await session.execute(
-                select(self.model).filter(self.model.id == id)
-            )
+            query = self._get_base_query().filter(self.model.id == id)
+            result = await session.execute(query)
             obj = result.scalars().first()
 
             duration = (time.time() - start) * 1000
@@ -34,7 +42,8 @@ class BaseRepository(Generic[ModelType]):
     ) -> List[ModelType]:
         start = time.time()
         try:
-            result = await session.execute(select(self.model).offset(skip).limit(limit))
+            query = self._get_base_query().offset(skip).limit(limit)
+            result = await session.execute(query)
             objs = list(result.scalars().all())
 
             duration = (time.time() - start) * 1000
@@ -47,6 +56,12 @@ class BaseRepository(Generic[ModelType]):
     async def create(self, session: AsyncSession, *, obj_in: dict) -> ModelType:
         start = time.time()
         try:
+            # Ensure tenant_id is set if applicable and missing
+            if hasattr(self.model, "tenant_id") and "tenant_id" not in obj_in:
+                tenant_id = get_current_tenant_id()
+                if tenant_id:
+                    obj_in["tenant_id"] = tenant_id
+
             db_obj = self.model(**obj_in)
             session.add(db_obj)
             await session.commit()

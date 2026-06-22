@@ -2,7 +2,7 @@ from sqlalchemy import text
 
 from app.core.config import get_settings
 from app.db.session import AsyncSessionLocal
-from app.schemas.observability import ComponentHealth, SystemHealthResponse
+from app.schemas.observability import ComponentHealth, SystemHealthResponse, PostGISHealth
 
 
 class HealthAggregator:

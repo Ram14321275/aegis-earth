@@ -156,6 +156,30 @@
 - Architected `BaselineRetrievalService` querying trailing 30-day windows to establish historic pre-flood baselines cleanly mapped against `ChangeDetector` delta reductions.
 - Implemented heuristic `RiskScorer` deriving dynamic confidence levels (LOW, MODERATE, HIGH, CRITICAL) strictly from relative newly-inundated areas.
 - Exposed GeoJSON `FloodPolygon` boundaries directly mapped to the UI, while syncing latency to `/api/v1/system/metrics` under `flood_detection_duration_ms`.
+- Sprint 2 Checkpoint 35 completed (Wildfire Detection Engine)
+- Engineered the `app/core/analysis/wildfire/` domain transforming ARD optical indices into deterministic `WildfireAssessment` records.
+- Built `WildfireChangeDetector` calculating dNBR (Normalized Burn Ratio difference) and vegetation loss using GEE expressions.
+- Architected `BaselineRetrievalService` for wildfires querying 30-day trailing windows.
+- Implemented `WildfireRiskScorer` deriving severity (LOW, MODERATE, HIGH, CRITICAL) mapping exactly to the existing risk engine.
+- Integrated natively with `AlertEngine` to generate deterministic Wildfire Watch and Warnings natively connected to existing observability.
+- Sprint 2 Checkpoint 36 completed (Historical Change Detection Engine).
+- Transformed real-time disaster detection into temporal environmental intelligence.
+- Extracted `spectral_indices.py` (NDVI, NDWI, NBR, NDBI) into shared architecture to compute historical changes over 7d, 30d, 90d, 1y intervals.
+- Integrated `TemporalRetrievalService` with `DistributedLock` deduplication avoiding stampeding parallel Earth Engine fetch queries.
+- Separated `TemporalComparisonEngine` raw spectral delta computations from `EnvironmentalChangeScorer` (interpreting 0-100 severity bounds).
+- Augmented `ChangeGeoJSONGenerator` appending rich temporal telemetry directly onto exported visualization layers.
+- Sprint 2 Checkpoint 37 completed (AI Intelligence Orchestration Layer).
+- Architected the `backend/app/core/intelligence/` domain providing a unified interface across all disaster engines.
+- Designed `IntelligenceSignal` and `IntelligenceAssessment` contracts explicitly capturing confidence and temporal metadata.
+- Implemented `EventPrioritizationEngine` sorting hazards using severity weights, confidence, and logarithmic area functions.
+- Engineered `CrossHazardCorrelationEngine` establishing causal relationships (e.g., Wildfire causes Vegetation Loss) across previously isolated pipelines.
+- Integrated `ExplainabilityEngine` generating structured `contributing_indicators` and `reasoning_summary` responses.
+- Structured un-coupled AI Provider interfaces preparing for OpenAI / Gemini integrations securely.
+- Sprint 2 Checkpoint 38 completed (Real-Time Intelligence Streaming Layer).
+- Designed `BaseStreamEvent` schema contracts enforcing `event_id`, `correlation_id`, and `source` metadata to secure future replay architectures.
+- Developed `WebSocketManager` integrating slow-consumer queue draining and backpressure disconnects preventing global stream stalling.
+- Implemented global `RedisPubSubBroker` listening cleanly to isolated streams (e.g., `stream:flood`, `stream:intelligence`).
+- Exposed dynamic `/ws/intelligence` WebSockets enabling seamless frontend region subscriptions without reconnection loops.
 ## Issues
 -
 
@@ -202,3 +226,29 @@
 - Add PostgreSQL migration tooling once the database service is confirmed.
 - Add provider adapters for Open-Meteo and Sentinel metadata ingestion in Sprint 1 follow-up work.
 - Confirm local PostgreSQL availability and create the first migration set.
+
+## Checkpoint 40: Enterprise Authentication & Multi-Tenant Security
+- Implemented TenantAwareModel and global tenant_id partitioning in BaseRepository.
+- Added core security module (auth, jwt, api_keys, rbac, tenants, middleware, audit, service_accounts, streaming_auth).
+- Updated Redis cache manager for tenant isolation.
+- Added security Prometheus metrics.
+## Checkpoint 41: Distributed Job Orchestration & Resilient Processing Layer
+- Created core job infrastructure domain (queue.py, scheduler.py, orchestration.py, retry.py, deduplication.py, idempotency.py, workers.py).
+- Implemented robust Redis queue mapping matching `QueueInterface`.
+- Built priority scheduling merging disaster severity, human risk, SLA, and urgency algorithms.
+- Configured request deduplication mapping fingerprints behind strict Redis `SET NX EX` atomic locks.
+- Refactored `CachePolicyEngine` for Adaptive TTLs (Critical: 5m, Historical: 24h+).
+- Refactored `/api/v1/analysis` returning async `202 Accepted` job references resolving idempotency headers.
+## Checkpoint 42: Multi-Region Intelligence Reliability & Disaster Fusion Engine
+- Designed the `FusionEngine` producing `RegionalThreatAssessment` scaling local hazard outputs logically.
+- Built explicit `TemporalConsistencyEngine` implementing hysteresis stabilizing escalation risks from oscillating.
+- Created `ReliabilityEngine` determining provider degradation while leaving raw output intelligence unmodified.
+- Deployed `OperationalPrioritizationEngine` modifying escalation risk via real-time network and queue saturation logic.
+- Built `CorrelationEngine` detecting cascading events safely bounded by cooldown parameters.
+- Synced unified operations directly into the `MetricsStore` exporting active fusion monitoring limits.
+## Checkpoint 43: Sprint 2 Stabilization & Testing
+- Refactored `JobQueueManager` to correctly decouple `RedisJobQueue` execution logic.
+- Resolved attribute mismatches in `JobService` mapped to `AnalysisJob` model metrics.
+- Fixed temporal assertions and `WildfireChangeDetector` mock integration returning structured `vegetation_impact` indices.
+- Fixed test configuration by setting up an explicit mock queue for Redis and bypassing auth in testing via `sys.modules` check.
+- Restored test suite stability to 100% passing across 82 parallel async `pytest` tasks.

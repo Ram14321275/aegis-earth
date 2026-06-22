@@ -5,6 +5,20 @@ from unittest.mock import AsyncMock, patch
 from app.main import app
 from app.core.jobs.statuses import JobStatus
 from app.db.session import get_db_session
+from app.core.jobs.manager import job_queue_manager
+
+class MockQueue:
+    def __init__(self):
+        self.q = []
+    async def enqueue(self, qname, payload, priority=0):
+        self.q.append(payload)
+    async def dequeue(self, qname, timeout=0):
+        if self.q: return self.q.pop(0)
+        return None
+    async def get_depth(self, qname):
+        return len(self.q)
+
+job_queue_manager._queue = MockQueue()
 
 mock_session = AsyncMock()
 app.dependency_overrides[get_db_session] = lambda: mock_session

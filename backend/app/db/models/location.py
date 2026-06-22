@@ -2,10 +2,10 @@ from sqlalchemy import Float, String
 from sqlalchemy.orm import Mapped, mapped_column
 from geoalchemy2 import Geography
 
-from app.db.base import BaseModel
+from app.db.base import TenantAwareModel
 
 
-class Location(BaseModel):
+class Location(TenantAwareModel):
     __tablename__ = "locations"
 
     city: Mapped[str] = mapped_column(String, index=True)
