@@ -167,3 +167,11 @@ Future disaster intelligence request flow:
 - **Immutable Snapshot Persistence**: Ensures all timeline frames are captured as append-only immutable records (`TimelineSnapshot`), guaranteeing export and audit consistency during rapidly changing planetary events.
 - **Async Export Engine**: Dispatches JSON, CSV, and GeoJSON report generation directly into the Redis-backed worker layer, averting HTTP timeouts and shielding active hazard engines from expensive I/O scans.
 - **Command Center WebSocket Streams**: Granular, backpressure-safe channels (`/ws/command-center`) distributing explicit `ESCALATION_WARNING` and priority shifts instantaneously to connected enterprise dashboards.
+
+## Autonomous Predictive Intelligence Layer
+- **Hazard Forecasting**: Employs adaptive TTLs and statistical baselines to project temporal escalations. Guarantees 100% deterministic fallback capabilities and strictly penalizes confidence based on telemetry staleness.
+- **Infrastructure Prediction**: Actively monitors queue depth, worker saturation, and streaming throughput via the `MetricsStore` to predict overload events before they trigger system cascading failures.
+- **Autonomous Remediation**: Translates infrastructure forecasts into safe, explainable `RemediationPlans`. For safety, destructive actions (e.g., node termination) are barred without strict human override, though safe scale-out actions can be recommended.
+- **Anomaly Detection**: Scans multi-region streams for telemetry drift and hazard spikes using statistical variance bounds paired with explainable AI signal classifiers.
+- **Planetary Simulation**: Conducts extensive `ScenarioSimulation` runs over projected horizons (up to 90 days), calculating cascading impact metrics and population vulnerability trajectories asynchronously.
+- **Strict Explainability**: Opaque AI is structurally banned. Every predictive engine conforms to the `Explanation` contract, explicitly detailing contributing sources, weights, uncertainty bounds, and degraded-mode warnings.

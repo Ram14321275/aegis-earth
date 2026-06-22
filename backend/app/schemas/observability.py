@@ -174,6 +174,21 @@ class CommandCenterMetrics(BaseModel):
     websocket_timeline_connections: int
     command_center_active_streams: int
 
+class PredictiveMetrics(BaseModel):
+    forecast_generation_total: int
+    forecast_failures_total: int
+    anomaly_detection_total: int
+    simulation_duration_ms: float
+    predictive_cache_hits: int
+    predictive_queue_depth: int
+
+class InfrastructurePredictionMetrics(BaseModel):
+    infrastructure_forecast_duration_ms: float
+
+class AutonomousRemediationMetrics(BaseModel):
+    autonomous_remediations_total: int
+    remediation_failures_total: int
+
 
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
@@ -197,6 +212,9 @@ class SystemMetricsResponse(BaseModel):
     gateway: GatewayMetrics
     tiles: TileMetrics
     command_center: CommandCenterMetrics
+    predictive: PredictiveMetrics
+    infrastructure_prediction: InfrastructurePredictionMetrics
+    remediation: AutonomousRemediationMetrics
 
 
 class ComponentHealth(BaseModel):

@@ -24,6 +24,9 @@ from app.schemas.observability import (
     GatewayMetrics,
     TileMetrics,
     CommandCenterMetrics,
+    PredictiveMetrics,
+    InfrastructurePredictionMetrics,
+    AutonomousRemediationMetrics,
 )
 
 
@@ -198,6 +201,19 @@ class MetricsStore:
             "replay_sessions_total": 0,
             "websocket_timeline_connections": 0,
             "command_center_active_streams": 0
+        }
+
+        # Predictive Intelligence
+        self.predictive_metrics = {
+            "forecast_generation_total": 0,
+            "forecast_failures_total": 0,
+            "anomaly_detection_total": 0,
+            "simulation_duration_ms": 0.0,
+            "predictive_cache_hits": 0,
+            "predictive_queue_depth": 0,
+            "infrastructure_forecast_duration_ms": 0.0,
+            "autonomous_remediations_total": 0,
+            "remediation_failures_total": 0
         }
 
         self._metrics_lock = threading.Lock()
@@ -563,6 +579,8 @@ class MetricsStore:
         with self._metrics_lock:
             if metric_name in self.command_center_metrics:
                 self.command_center_metrics[metric_name] += value
+            elif metric_name in self.predictive_metrics:
+                self.predictive_metrics[metric_name] += value
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
@@ -730,6 +748,21 @@ class MetricsStore:
                 ),
                 command_center=CommandCenterMetrics(
                     **self.command_center_metrics
+                ),
+                predictive=PredictiveMetrics(
+                    forecast_generation_total=self.predictive_metrics["forecast_generation_total"],
+                    forecast_failures_total=self.predictive_metrics["forecast_failures_total"],
+                    anomaly_detection_total=self.predictive_metrics["anomaly_detection_total"],
+                    simulation_duration_ms=self.predictive_metrics["simulation_duration_ms"],
+                    predictive_cache_hits=self.predictive_metrics["predictive_cache_hits"],
+                    predictive_queue_depth=self.predictive_metrics["predictive_queue_depth"]
+                ),
+                infrastructure_prediction=InfrastructurePredictionMetrics(
+                    infrastructure_forecast_duration_ms=self.predictive_metrics["infrastructure_forecast_duration_ms"]
+                ),
+                remediation=AutonomousRemediationMetrics(
+                    autonomous_remediations_total=self.predictive_metrics["autonomous_remediations_total"],
+                    remediation_failures_total=self.predictive_metrics["remediation_failures_total"]
                 )
             )
 
