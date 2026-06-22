@@ -161,6 +161,19 @@ class TileMetrics(BaseModel):
     geometry_simplification_savings_bytes: int
     websocket_tile_broadcasts_total: int
 
+class CommandCenterMetrics(BaseModel):
+    timeline_generation_duration_ms: float
+    timeline_queries_total: int
+    timeline_cache_hits_total: int
+    hotspot_refresh_total: int
+    snapshot_generation_duration_ms: float
+    snapshot_persistence_duration_ms: float
+    export_jobs_total: int
+    export_failures_total: int
+    replay_sessions_total: int
+    websocket_timeline_connections: int
+    command_center_active_streams: int
+
 
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
@@ -183,6 +196,7 @@ class SystemMetricsResponse(BaseModel):
     fusion: FusionMetrics
     gateway: GatewayMetrics
     tiles: TileMetrics
+    command_center: CommandCenterMetrics
 
 
 class ComponentHealth(BaseModel):

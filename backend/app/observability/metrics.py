@@ -23,6 +23,7 @@ from app.schemas.observability import (
     FusionMetrics,
     GatewayMetrics,
     TileMetrics,
+    CommandCenterMetrics,
 )
 
 
@@ -183,6 +184,21 @@ class MetricsStore:
         self.tile_cache_hits_total = 0
         self.geometry_simplification_savings_bytes = 0
         self.websocket_tile_broadcasts_total = 0
+
+        # Command Center
+        self.command_center_metrics = {
+            "timeline_generation_duration_ms": 0.0,
+            "timeline_queries_total": 0,
+            "timeline_cache_hits_total": 0,
+            "hotspot_refresh_total": 0,
+            "snapshot_generation_duration_ms": 0.0,
+            "snapshot_persistence_duration_ms": 0.0,
+            "export_jobs_total": 0,
+            "export_failures_total": 0,
+            "replay_sessions_total": 0,
+            "websocket_timeline_connections": 0,
+            "command_center_active_streams": 0
+        }
 
         self._metrics_lock = threading.Lock()
 
@@ -543,6 +559,11 @@ class MetricsStore:
         with self._metrics_lock:
             self.websocket_tile_broadcasts_total += 1
 
+    def record_command_center_action(self, metric_name: str, value: float = 1.0):
+        with self._metrics_lock:
+            if metric_name in self.command_center_metrics:
+                self.command_center_metrics[metric_name] += value
+
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
             avg_latency = (
@@ -706,6 +727,9 @@ class MetricsStore:
                     tile_cache_hits_total=self.tile_cache_hits_total,
                     geometry_simplification_savings_bytes=self.geometry_simplification_savings_bytes,
                     websocket_tile_broadcasts_total=self.websocket_tile_broadcasts_total,
+                ),
+                command_center=CommandCenterMetrics(
+                    **self.command_center_metrics
                 )
             )
 

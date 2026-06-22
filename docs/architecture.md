@@ -160,3 +160,10 @@ Future disaster intelligence request flow:
 - **Edge Caching Engine**: CDN-aware architecture generating highly tunable `Cache-Control` (`stale-while-revalidate`), `ETag`, and `Vary: X-Tenant-ID` HTTP headers based dynamically on localized hazard severity.
 - **Websocket Tile Federation**: Delivers highly scoped viewport invalidation (`tile_invalidation`) events to connected `Stitch` frontends, triggering lazy re-fetches without massive broadcast storms.
 - **Visualization Contracts**: Stable `LayerManifest` and `TileMetadata` JSON contracts isolating external rendering libraries (Mapbox GL, Leaflet) from volatile internal backend representations.
+
+## Planetary Command Center & Timeline Layer
+- **Global Timeline Engine**: Pre-materializes short-term (1h, 24h, 7d) operational windows while supporting dynamic streaming aggregations for custom macro-ranges.
+- **Threat Prioritization Ranking**: A fully explainable, deterministic engine applying strict weights against raw severity, confidence, population exposure, cross-hazard fusion amplification, and historical persistence.
+- **Immutable Snapshot Persistence**: Ensures all timeline frames are captured as append-only immutable records (`TimelineSnapshot`), guaranteeing export and audit consistency during rapidly changing planetary events.
+- **Async Export Engine**: Dispatches JSON, CSV, and GeoJSON report generation directly into the Redis-backed worker layer, averting HTTP timeouts and shielding active hazard engines from expensive I/O scans.
+- **Command Center WebSocket Streams**: Granular, backpressure-safe channels (`/ws/command-center`) distributing explicit `ESCALATION_WARNING` and priority shifts instantaneously to connected enterprise dashboards.

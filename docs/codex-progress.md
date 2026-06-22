@@ -279,3 +279,12 @@
 - Drafted the `PlaybackTimeline` architecture ensuring immutable historical frames are retrieved with distinct timestamp indexing.
 - Authored formal PostGIS Optimization specifications (`docs/decisions/005-postgis-tile-optimization.md`) enforcing `GiST` indexes over bounded `ST_Intersects` pre-filters to prevent production table scans.
 - Verified generation, caching logic, and coordinate conversions directly via PyTest cases (`test_vector.py`, `test_caching.py`).
+## Checkpoint 47: Planetary Command Center & Timeline Intelligence Layer
+- Architected the `backend/app/core/command_center/` domain housing the unified Timeline, Prioritization, Snapshot, and Export engines.
+- Engineered the `GlobalTimelineEngine` to pre-materialize high-frequency operational windows (1h, 24h, 7d) while dynamically aggregating massive trailing datasets (30d+).
+- Built the `ThreatPrioritizationEngine`, enforcing a 100% deterministic, explainable ranking algorithm calculating threat indices via Severity (40%), Exposure (30%), Fusion Context (15%), and Persistence (15%), penalized by low Confidence.
+- Implemented the `SnapshotEngine` establishing absolute immutability for all historical intelligence frames, preventing dynamic mutation cascades during retroactive analysis.
+- Deployed the `CommandCenterExportService` to offload massive JSON/CSV/GeoJSON report generation entirely onto the distributed job queue, returning immediate `202 Accepted` HTTP envelopes.
+- Extended the WebSocket Federation layer to support discrete `command-center` delta streaming, maintaining strict tenant isolation without payload saturation.
+- Expanded `MetricsStore` heavily with `CommandCenterMetrics` spanning `snapshot_persistence_duration_ms` to `timeline_cache_hits_total`.
+- Validated all core logical branches, immutability rules, and export rejections locally via `test_timeline_engine.py`, `test_prioritization.py`, and `test_snapshot_immutability.py`.
