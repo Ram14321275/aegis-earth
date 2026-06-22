@@ -151,6 +151,16 @@ class GatewayMetrics(BaseModel):
     degraded_responses_total: int
     websocket_broadcast_latency_ms: float
 
+class TileMetrics(BaseModel):
+    tile_generation_duration_ms: float
+    vector_tiles_total: int
+    raster_tiles_total: int
+    vector_tile_size_bytes: int
+    raster_tile_size_bytes: int
+    tile_cache_hits_total: int
+    geometry_simplification_savings_bytes: int
+    websocket_tile_broadcasts_total: int
+
 
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
@@ -172,6 +182,7 @@ class SystemMetricsResponse(BaseModel):
     streaming: StreamingMetrics
     fusion: FusionMetrics
     gateway: GatewayMetrics
+    tiles: TileMetrics
 
 
 class ComponentHealth(BaseModel):

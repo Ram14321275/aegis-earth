@@ -22,6 +22,7 @@ from app.schemas.observability import (
     StreamingMetrics,
     FusionMetrics,
     GatewayMetrics,
+    TileMetrics,
 )
 
 
@@ -172,6 +173,16 @@ class MetricsStore:
         self.provider_timeout_total = 0
         self.degraded_responses_total = 0
         self.websocket_broadcast_latency_ms = 0.0
+
+        # Tiles
+        self.tile_generation_duration_ms = 0.0
+        self.vector_tiles_total = 0
+        self.raster_tiles_total = 0
+        self.vector_tile_size_bytes = 0
+        self.raster_tile_size_bytes = 0
+        self.tile_cache_hits_total = 0
+        self.geometry_simplification_savings_bytes = 0
+        self.websocket_tile_broadcasts_total = 0
 
         self._metrics_lock = threading.Lock()
 
@@ -510,6 +521,28 @@ class MetricsStore:
         with self._metrics_lock:
             self.websocket_broadcast_latency_ms += latency_ms
 
+    def record_tile_generation(self, duration_ms: float, tile_type: str, size_bytes: int):
+        with self._metrics_lock:
+            self.tile_generation_duration_ms += duration_ms
+            if tile_type == "vector":
+                self.vector_tiles_total += 1
+                self.vector_tile_size_bytes += size_bytes
+            elif tile_type == "raster":
+                self.raster_tiles_total += 1
+                self.raster_tile_size_bytes += size_bytes
+
+    def record_tile_cache_hit(self):
+        with self._metrics_lock:
+            self.tile_cache_hits_total += 1
+
+    def record_geometry_simplification_savings(self, savings_bytes: int):
+        with self._metrics_lock:
+            self.geometry_simplification_savings_bytes += savings_bytes
+
+    def record_websocket_tile_broadcast(self):
+        with self._metrics_lock:
+            self.websocket_tile_broadcasts_total += 1
+
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
             avg_latency = (
@@ -663,6 +696,16 @@ class MetricsStore:
                     provider_timeout_total=self.provider_timeout_total,
                     degraded_responses_total=self.degraded_responses_total,
                     websocket_broadcast_latency_ms=self.websocket_broadcast_latency_ms,
+                ),
+                tiles=TileMetrics(
+                    tile_generation_duration_ms=self.tile_generation_duration_ms,
+                    vector_tiles_total=self.vector_tiles_total,
+                    raster_tiles_total=self.raster_tiles_total,
+                    vector_tile_size_bytes=self.vector_tile_size_bytes,
+                    raster_tile_size_bytes=self.raster_tile_size_bytes,
+                    tile_cache_hits_total=self.tile_cache_hits_total,
+                    geometry_simplification_savings_bytes=self.geometry_simplification_savings_bytes,
+                    websocket_tile_broadcasts_total=self.websocket_tile_broadcasts_total,
                 )
             )
 

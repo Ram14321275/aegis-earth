@@ -152,3 +152,11 @@ Future disaster intelligence request flow:
 - **Public Contracts**: Strict, versioned schemas (`IntelligenceSnapshot`, `RegionalSummary`) shared equally between REST and WebSocket interfaces.
 - **SDK Generation**: Automated extraction of OpenAPI schema utilizing `openapi-generator-cli` to scaffold perfectly typed TypeScript and Python clients.
 - **Rate Limiting**: Sliding-window Token Bucket rate limiting via Redis. Supports Tenant, API-Key, and IP level quotas.
+
+## Geospatial Visualization & Tile Streaming Layer
+- **PostGIS Mapbox Vector Tiles (MVT)**: Natively generated vector geometries delivered via `ST_AsMVT` and `ST_AsMVTGeom`, eliminating mid-tier payload serialization overhead. Protected by strict `GiST` spatial indexing.
+- **Dynamic Level of Detail (LOD)**: Zoom-sensitive `ST_SimplifyPreserveTopology` dynamically trims geometric fidelity on low-zoom planetary overviews to protect frontend render loops.
+- **Raster Rendering Stack**: High-throughput rendering pipeline generating `WebP/PNG` heatmap and analytical intensity overlays natively without immediate GPU coupling.
+- **Edge Caching Engine**: CDN-aware architecture generating highly tunable `Cache-Control` (`stale-while-revalidate`), `ETag`, and `Vary: X-Tenant-ID` HTTP headers based dynamically on localized hazard severity.
+- **Websocket Tile Federation**: Delivers highly scoped viewport invalidation (`tile_invalidation`) events to connected `Stitch` frontends, triggering lazy re-fetches without massive broadcast storms.
+- **Visualization Contracts**: Stable `LayerManifest` and `TileMetadata` JSON contracts isolating external rendering libraries (Mapbox GL, Leaflet) from volatile internal backend representations.

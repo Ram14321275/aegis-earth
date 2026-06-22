@@ -270,3 +270,12 @@
 - Upgraded the `CacheService` to inject Adaptive TTL policies mapping Hazard Severity levels to dynamic retention periods (e.g., 10m for Critical vs 6h for Low).
 - Created `sdk/generate.sh` automating Python and TypeScript SDK scaffold generation directly from the validated FastAPI OpenAPI schemas.
 - Multiplexed internal Redis stream subscriptions into a unified, rate-limited, backpressure-safe `/ws/v1/intelligence` WebSocket Gateway endpoint.
+## Checkpoint 46: Global Geospatial Intelligence Visualization & Tile Streaming Layer
+- Engineered a native PostGIS Mapbox Vector Tile (MVT) generation pipeline via `backend/app/core/tiles/vector/engine.py` protecting backend RAM from massive GIS serialization.
+- Implemented `GeometryOptimizer` utilizing dynamic zoom-aware `Douglas-Peucker` simplification ensuring multi-continent viewport bounds do not crash frontend DOMs.
+- Drafted a `RasterTileEngine` pipeline ready to compile multi-hazard heatmap indices to optimized WebP/PNG tiles.
+- Deployed an `EdgeCacheManager` binding hazard-severity to HTTP `Cache-Control` max-age constraints, enabling aggressive CDN offloading with safe `stale-while-revalidate` policies.
+- Extended the `WebSocketFederationManager` with a `LiveTileStreaming` channel broadcasting viewport-scoped `tile_invalidation` payloads ensuring Maps are updated live natively.
+- Drafted the `PlaybackTimeline` architecture ensuring immutable historical frames are retrieved with distinct timestamp indexing.
+- Authored formal PostGIS Optimization specifications (`docs/decisions/005-postgis-tile-optimization.md`) enforcing `GiST` indexes over bounded `ST_Intersects` pre-filters to prevent production table scans.
+- Verified generation, caching logic, and coordinate conversions directly via PyTest cases (`test_vector.py`, `test_caching.py`).
