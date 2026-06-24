@@ -27,6 +27,9 @@ from app.schemas.observability import (
     PredictiveMetrics,
     InfrastructurePredictionMetrics,
     AutonomousRemediationMetrics,
+    CopilotMetrics,
+    OperationsMetrics,
+    IntegrationsMetrics,
 )
 
 
@@ -214,6 +217,47 @@ class MetricsStore:
             "infrastructure_forecast_duration_ms": 0.0,
             "autonomous_remediations_total": 0,
             "remediation_failures_total": 0
+        }
+
+        # Copilot
+        self.copilot_metrics = {
+            "degraded_reasoning_total": 0,
+            "explainability_validation_failures": 0,
+            "mission_memory_evictions": 0,
+            "copilot_stream_backpressure_total": 0,
+            "recommendation_generation_total": 0,
+            "governance_rejections_total": 0,
+            "copilot_narratives_generated_total": 0,
+            "copilot_degraded_responses_total": 0,
+            "recommendation_blocked_total": 0,
+            "narrative_generation_duration_ms": 0.0,
+            "mission_context_assembly_duration_ms": 0.0,
+            "explainability_fallback_total": 0
+        }
+
+        # Operations
+        self.operations_metrics = {
+            "incidents_total": 0,
+            "active_investigations": 0,
+            "escalation_events_total": 0,
+            "collaboration_sessions_total": 0,
+            "websocket_sync_failures": 0,
+            "workflow_transition_failures": 0,
+            "operator_presence_count": 0,
+            "replay_generation_duration_ms": 0.0
+        }
+
+        # Integrations
+        self.integrations_metrics = {
+            "provider_requests_total": 0,
+            "provider_failures_total": 0,
+            "ingestion_events_total": 0,
+            "normalization_failures_total": 0,
+            "webhook_deliveries_total": 0,
+            "webhook_failures_total": 0,
+            "interoperability_exports_total": 0,
+            "humanitarian_requests_total": 0,
+            "replay_reconstructions_total": 0
         }
 
         self._metrics_lock = threading.Lock()
@@ -581,6 +625,12 @@ class MetricsStore:
                 self.command_center_metrics[metric_name] += value
             elif metric_name in self.predictive_metrics:
                 self.predictive_metrics[metric_name] += value
+            elif metric_name in self.copilot_metrics:
+                self.copilot_metrics[metric_name] += value
+            elif metric_name in self.operations_metrics:
+                self.operations_metrics[metric_name] += value
+            elif metric_name in self.integrations_metrics:
+                self.integrations_metrics[metric_name] += value
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
@@ -763,6 +813,15 @@ class MetricsStore:
                 remediation=AutonomousRemediationMetrics(
                     autonomous_remediations_total=self.predictive_metrics["autonomous_remediations_total"],
                     remediation_failures_total=self.predictive_metrics["remediation_failures_total"]
+                ),
+                copilot=CopilotMetrics(
+                    **self.copilot_metrics
+                ),
+                operations=OperationsMetrics(
+                    **self.operations_metrics
+                ),
+                integrations=IntegrationsMetrics(
+                    **self.integrations_metrics
                 )
             )
 

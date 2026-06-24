@@ -56,3 +56,31 @@ async def websocket_system(websocket: WebSocket):
     """
     await generic_ws_handler(websocket)
 
+@ws_router.websocket("/providers")
+async def websocket_providers(websocket: WebSocket):
+    """
+    Provider degradation streaming.
+    """
+    await generic_ws_handler(websocket, default_category=StreamEventType.PROVIDERS)
+
+@ws_router.websocket("/integrations")
+async def websocket_integrations(websocket: WebSocket):
+    """
+    Ingestion alerts and replay notifications.
+    """
+    await generic_ws_handler(websocket, default_category=StreamEventType.INTEGRATIONS)
+
+@ws_router.websocket("/humanitarian")
+async def websocket_humanitarian(websocket: WebSocket):
+    """
+    Humanitarian coordination updates.
+    """
+    await generic_ws_handler(websocket, default_category=StreamEventType.HUMANITARIAN)
+
+@ws_router.websocket("/distribution")
+async def websocket_distribution(websocket: WebSocket):
+    """
+    Outbound delivery updates.
+    """
+    await generic_ws_handler(websocket, default_category=StreamEventType.DISTRIBUTION)
+

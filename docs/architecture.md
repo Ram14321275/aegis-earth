@@ -175,3 +175,24 @@ Future disaster intelligence request flow:
 - **Anomaly Detection**: Scans multi-region streams for telemetry drift and hazard spikes using statistical variance bounds paired with explainable AI signal classifiers.
 - **Planetary Simulation**: Conducts extensive `ScenarioSimulation` runs over projected horizons (up to 90 days), calculating cascading impact metrics and population vulnerability trajectories asynchronously.
 - **Strict Explainability**: Opaque AI is structurally banned. Every predictive engine conforms to the `Explanation` contract, explicitly detailing contributing sources, weights, uncertainty bounds, and degraded-mode warnings.
+
+## Global AI Copilot & Mission Intelligence Layer
+- **Deterministic Narrative Engine**: Replaces opaque LLMs with template-driven logic generating Mission SITREPs, Executive Digests, and Escalation Narratives with absolute reproducibility.
+- **Explainability Validation**: Enforces that every emitted narrative retains a cryptographic `reasoning_hash` directly linking back to its underlying evidence. Rejects any orphaned or hallucinated recommendations automatically.
+- **Strict Governance Engine**: Pre-evaluates all operational actions. Automatically blocks destructive infrastructure manipulation or autonomous human evacuations, while strictly verifying all recommendation confidence boundaries (e.g. CRITICAL > 0.9).
+- **Mission Memory Architecture**: Provides thread-scoped operational persistence leveraging Redis lists with rolling 7-day TTL configurations to isolate tenant mission history safely.
+- **WebSocket Federation Expansion**: Integrates high-throughput `/ws/copilot` and `/ws/mission` streaming channels seamlessly through the unified `WebSocketFederationManager`, enabling seamless frontend telemetry updates.
+
+## Global Operations Console & Human Coordination Layer
+- **Immutable Investigation History**: Enforces append-only revision trees and cryptographic snapshot linkages for all analyst investigations. Never mutates historical states directly, ensuring comprehensive attribution.
+- **WebSocket Safety Model**: Isolates authoritative state within PostgreSQL and Redis event streams. WebSockets are restricted strictly to optimistic UI synchronization and presence broadcasting (`/ws/collaboration`, `/ws/operations`).
+- **Deterministic Escalation Engine**: Governs incident escalation logic preventing recursive feedback loops through strict cooldown windows, depth limits, and correlation tracing. Never triggers autonomous destructive actions.
+- **Operator Presence & Collaboration**: Synchronizes real-time map positions, annotations, and bookmarks ephemerally using Redis TTLs, automatically evicting stale presences.
+
+## Global External Integrations & Emergency Interoperability Layer
+- **Provider Framework Abstraction**: Implements a strict `ProviderInterface` backed by a circuit breaker and health tracking mechanism. Ensures internal orchestration engines remain completely isolated from vendor-specific data models and degradation.
+- **Replay-Safe Ingestion Pipeline**: Guarantees deterministic ingestion through strict schema validation and cryptographic payload hashing for deduplication. Malformed payloads are explicitly shunted into dead-letter queues to shield the core intelligence loop.
+- **Deterministic Normalization Engine**: Reconciles heterogeneous multi-vendor formats (e.g., CAP, weather feeds) into the immutable `CanonicalHazardEvent`. Operates with strict deterministic severity scaling and confidence adjustment to prevent opaque transformations.
+- **Webhook Security Gateway**: Intercepts all inbound vendor webhooks via strict HMAC signature verification, nonce validation, and payload timestamp validation to explicitly thwart replay and impersonation attacks.
+- **Explainable Humanitarian Coordination**: Handles external NGO resource and shelter routing requests by applying strict deterministic, explainable prioritization rankings. Completely bans opaque black-box AI from autonomous operational logic.
+- **Secure Export Engine**: Transpiles immutable canonical states into standard distribution formats (CAP 1.2, GeoJSON) securely, strictly preserving timeline lineage and confidence while preserving tenant isolation.

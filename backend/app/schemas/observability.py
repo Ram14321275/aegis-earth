@@ -190,6 +190,43 @@ class AutonomousRemediationMetrics(BaseModel):
     remediation_failures_total: int
 
 
+class CopilotMetrics(BaseModel):
+    degraded_reasoning_total: int
+    explainability_validation_failures: int
+    mission_memory_evictions: int
+    copilot_stream_backpressure_total: int
+    recommendation_generation_total: int
+    governance_rejections_total: int
+    copilot_narratives_generated_total: int
+    copilot_degraded_responses_total: int
+    recommendation_blocked_total: int
+    narrative_generation_duration_ms: float
+    mission_context_assembly_duration_ms: float
+    explainability_fallback_total: int
+
+class OperationsMetrics(BaseModel):
+    incidents_total: int
+    active_investigations: int
+    escalation_events_total: int
+    collaboration_sessions_total: int
+    websocket_sync_failures: int
+    workflow_transition_failures: int
+    operator_presence_count: int
+    replay_generation_duration_ms: float
+
+
+class IntegrationsMetrics(BaseModel):
+    provider_requests_total: int
+    provider_failures_total: int
+    ingestion_events_total: int
+    normalization_failures_total: int
+    webhook_deliveries_total: int
+    webhook_failures_total: int
+    interoperability_exports_total: int
+    humanitarian_requests_total: int
+    replay_reconstructions_total: int
+
+
 class SystemMetricsResponse(BaseModel):
     api: APIMetrics
     cache: CacheMetrics
@@ -215,6 +252,9 @@ class SystemMetricsResponse(BaseModel):
     predictive: PredictiveMetrics
     infrastructure_prediction: InfrastructurePredictionMetrics
     remediation: AutonomousRemediationMetrics
+    copilot: CopilotMetrics
+    operations: OperationsMetrics
+    integrations: IntegrationsMetrics
 
 
 class ComponentHealth(BaseModel):

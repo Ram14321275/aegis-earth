@@ -129,3 +129,102 @@ async def websocket_intelligence_endpoint(
             # Handle potential keep-alives or subscription changes here
     except WebSocketDisconnect:
         ws_manager.disconnect(websocket, tenant_id)
+
+@ws_router.websocket("/copilot")
+async def websocket_copilot_endpoint(
+    websocket: WebSocket,
+    user: dict = Depends(get_current_user_ws)
+):
+    tenant_id = user.get("tenant_id", "anonymous")
+    ws_manager.start_background_task()
+    await ws_manager.connect(websocket, tenant_id)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, tenant_id)
+
+@ws_router.websocket("/mission")
+async def websocket_mission_endpoint(
+    websocket: WebSocket,
+    user: dict = Depends(get_current_user_ws)
+):
+    tenant_id = user.get("tenant_id", "anonymous")
+    ws_manager.start_background_task()
+    await ws_manager.connect(websocket, tenant_id)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, tenant_id)
+
+@ws_router.websocket("/escalations")
+async def websocket_escalations_endpoint(
+    websocket: WebSocket,
+    user: dict = Depends(get_current_user_ws)
+):
+    tenant_id = user.get("tenant_id", "anonymous")
+    ws_manager.start_background_task()
+    await ws_manager.connect(websocket, tenant_id)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, tenant_id)
+
+@ws_router.websocket("/incidents")
+async def websocket_incidents_endpoint(
+    websocket: WebSocket,
+    user: dict = Depends(get_current_user_ws)
+):
+    tenant_id = user.get("tenant_id", "anonymous")
+    ws_manager.start_background_task()
+    await ws_manager.connect(websocket, tenant_id)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, tenant_id)
+
+@ws_router.websocket("/investigations")
+async def websocket_investigations_endpoint(
+    websocket: WebSocket,
+    user: dict = Depends(get_current_user_ws)
+):
+    tenant_id = user.get("tenant_id", "anonymous")
+    ws_manager.start_background_task()
+    await ws_manager.connect(websocket, tenant_id)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, tenant_id)
+
+@ws_router.websocket("/operations")
+async def websocket_operations_endpoint(
+    websocket: WebSocket,
+    user: dict = Depends(get_current_user_ws)
+):
+    tenant_id = user.get("tenant_id", "anonymous")
+    ws_manager.start_background_task()
+    await ws_manager.connect(websocket, tenant_id)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, tenant_id)
+
+@ws_router.websocket("/collaboration")
+async def websocket_collaboration_endpoint(
+    websocket: WebSocket,
+    user: dict = Depends(get_current_user_ws)
+):
+    tenant_id = user.get("tenant_id", "anonymous")
+    ws_manager.start_background_task()
+    await ws_manager.connect(websocket, tenant_id)
+    try:
+        while True:
+            # Optionally parse collaboration sync payload here if doing full P2P
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, tenant_id)

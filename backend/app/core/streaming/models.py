@@ -18,6 +18,10 @@ class StreamEventType(str, Enum):
     ENVIRONMENTAL_CHANGE = "environmental_change"
     INTELLIGENCE = "intelligence"
     ALERT = "alert"
+    PROVIDERS = "providers"
+    INTEGRATIONS = "integrations"
+    HUMANITARIAN = "humanitarian"
+    DISTRIBUTION = "distribution"
 
 
 class BaseStreamEvent(BaseModel):
