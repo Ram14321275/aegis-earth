@@ -236,6 +236,15 @@ class CyberMetrics(BaseModel):
     threat_feed_staleness_seconds: float = 0.0
     quarantine_duration_seconds: float = 0.0
 
+class ResilienceMetrics(BaseModel):
+    recovery_durations_total: float = 0.0
+    healing_actions_total: int = 0
+    failover_promotions_total: int = 0
+    degraded_mode_activations_total: int = 0
+    replay_verification_failures_total: int = 0
+    restoration_aborts_total: int = 0
+    mesh_survivability_score: float = 100.0
+
 class OperationsMetrics(BaseModel):
     incidents_total: int
     active_investigations: int
@@ -289,6 +298,7 @@ class SystemMetricsResponse(BaseModel):
     governance_metrics: GovernanceMetrics
     edge_metrics: EdgeMetrics
     cyber_metrics: CyberMetrics
+    resilience_metrics: ResilienceMetrics
     remediation: AutonomousRemediationMetrics
     copilot: CopilotMetrics
     operations: OperationsMetrics

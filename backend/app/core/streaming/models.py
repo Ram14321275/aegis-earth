@@ -45,7 +45,16 @@ class StreamEventType(str, Enum):
     THREAT_FEED_UPDATE = "threat_feed_update"
     FORENSIC_REPLAY = "forensic_replay"
     CYBER_SIMULATION = "cyber_simulation"
-
+    RECOVERY_STARTED = "recovery_started"
+    RECOVERY_COMPLETED = "recovery_completed"
+    FAILOVER_PROMOTED = "failover_promoted"
+    SELF_HEALING_TRIGGERED = "self_healing_triggered"
+    INFRASTRUCTURE_COLLAPSE = "infrastructure_collapse"
+    DEGRADATION_MODE = "degradation_mode"
+    RECOVERY_VERIFIED = "recovery_verified"
+    MESH_PARTITION = "mesh_partition"
+    SIMULATION_COMPLETED = "simulation_completed"
+    RECOVERY_ABORTED = "recovery_aborted"
 
 class BaseStreamEvent(BaseModel):
     """

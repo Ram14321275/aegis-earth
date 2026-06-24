@@ -196,6 +196,73 @@ async def websocket_attestation_endpoint(websocket: WebSocket):
             await asyncio.sleep(1)
     except WebSocketDisconnect:
         manager.disconnect(websocket, "attestation")
+
+# ==========================================
+# Autonomous Sovereign Resilience & Mesh
+# ==========================================
+
+@router.websocket("/ws/resilience")
+async def websocket_resilience_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "resilience")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "resilience")
+
+@router.websocket("/ws/recovery")
+async def websocket_recovery_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "recovery")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "recovery")
+
+@router.websocket("/ws/failover")
+async def websocket_failover_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "failover")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "failover")
+
+@router.websocket("/ws/healing")
+async def websocket_healing_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "healing")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "healing")
+
+@router.websocket("/ws/mesh")
+async def websocket_mesh_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "mesh")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "mesh")
+
+@router.websocket("/ws/stabilization")
+async def websocket_stabilization_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "stabilization")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "stabilization")
+
+@router.websocket("/ws/degradation")
+async def websocket_degradation_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "degradation")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "degradation")
 @ws_router.websocket("/reconciliation")
 async def websocket_reconciliation(websocket: WebSocket):
     """Conflict reconciliation audit trails."""

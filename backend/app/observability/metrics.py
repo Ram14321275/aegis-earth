@@ -33,6 +33,7 @@ from app.schemas.observability import (
     GovernanceMetrics,
     EdgeMetrics,
     CyberMetrics,
+    ResilienceMetrics,
 )
 
 
@@ -307,6 +308,17 @@ class MetricsStore:
             "lineage_integrity_failures_total": 0,
             "threat_feed_staleness_seconds": 0.0,
             "quarantine_duration_seconds": 0.0
+        }
+
+        # Resilience
+        self.resilience_metrics: Dict[str, Any] = {
+            "recovery_durations_total": 0.0,
+            "healing_actions_total": 0,
+            "failover_promotions_total": 0,
+            "degraded_mode_activations_total": 0,
+            "replay_verification_failures_total": 0,
+            "restoration_aborts_total": 0,
+            "mesh_survivability_score": 100.0
         }
 
         self._metrics_lock = threading.Lock()
@@ -684,6 +696,8 @@ class MetricsStore:
                 self.edge_metrics[metric_name] += value
             elif metric_name in self.cyber_metrics:
                 self.cyber_metrics[metric_name] += value
+            elif metric_name in self.resilience_metrics:
+                self.resilience_metrics[metric_name] += value
 
     def record_integrations_action(self, action: str):
         with self._metrics_lock:
@@ -704,6 +718,11 @@ class MetricsStore:
         with self._metrics_lock:
             if action in self.cyber_metrics:
                 self.cyber_metrics[action] += value
+
+    def record_resilience_action(self, action: str, value: float = 1.0):
+        with self._metrics_lock:
+            if action in self.resilience_metrics:
+                self.resilience_metrics[action] += value
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:
