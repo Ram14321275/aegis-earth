@@ -32,6 +32,7 @@ from app.schemas.observability import (
     IntegrationsMetrics,
     GovernanceMetrics,
     EdgeMetrics,
+    CyberMetrics,
 )
 
 
@@ -288,6 +289,24 @@ class MetricsStore:
             "lineage_divergence_total": 0,
             "replication_latency_ms": 0.0,
             "consistency_violations_total": 0
+        }
+
+        # Cyber
+        self.cyber_metrics: Dict[str, Any] = {
+            "cyber_incidents_total": 0,
+            "threat_signals_total": 0,
+            "containment_actions_total": 0,
+            "quarantine_sessions_total": 0,
+            "attestation_failures_total": 0,
+            "replay_attack_attempts_total": 0,
+            "zero_trust_denials_total": 0,
+            "provider_compromise_events_total": 0,
+            "threat_feed_latency_ms": 0.0,
+            "simulation_runs_total": 0,
+            "containment_rollbacks_total": 0,
+            "lineage_integrity_failures_total": 0,
+            "threat_feed_staleness_seconds": 0.0,
+            "quarantine_duration_seconds": 0.0
         }
 
         self._metrics_lock = threading.Lock()
@@ -663,6 +682,8 @@ class MetricsStore:
                 self.integrations_metrics[metric_name] += value
             elif metric_name in self.edge_metrics:
                 self.edge_metrics[metric_name] += value
+            elif metric_name in self.cyber_metrics:
+                self.cyber_metrics[metric_name] += value
 
     def record_integrations_action(self, action: str):
         with self._metrics_lock:
@@ -678,6 +699,11 @@ class MetricsStore:
         with self._metrics_lock:
             if action in self.edge_metrics:
                 self.edge_metrics[action] += value
+
+    def record_cyber_action(self, action: str, value: float = 1.0):
+        with self._metrics_lock:
+            if action in self.cyber_metrics:
+                self.cyber_metrics[action] += value
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:

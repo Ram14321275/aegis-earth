@@ -191,3 +191,14 @@ In progress.
 * Deterministic conflict resolution logic (`ConflictResolutionEngine`).
 * Geopolitically isolated routing (`SovereignRouter`).
 * Lineage verification avoiding split-brains and corrupted chains.
+
+## Checkpoint 54: Autonomous Cyber Defense & Zero-Trust Security Fabric
+**Status:** Completed
+**Focus:** Self-defending, deterministic zero-trust architecture.
+**Key Deliverables:**
+* `backend/app/core/cyber/` domain.
+* Deterministic Threat Detection rejecting opaque ML decisions.
+* Zero-Trust Service Validation verifying lineage continuity and monotonic counters.
+* Autonomous Reversible Containment quarantining tenants and edges safely.
+* Forensic Reconstruction engine for immutable attack tracing.
+* Cryptographic signature verifications for edge node attestation.

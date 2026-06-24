@@ -220,6 +220,22 @@ class EdgeMetrics(BaseModel):
     replication_latency_ms: float = 0.0
     consistency_violations_total: int = 0
 
+class CyberMetrics(BaseModel):
+    cyber_incidents_total: int = 0
+    threat_signals_total: int = 0
+    containment_actions_total: int = 0
+    quarantine_sessions_total: int = 0
+    attestation_failures_total: int = 0
+    replay_attack_attempts_total: int = 0
+    zero_trust_denials_total: int = 0
+    provider_compromise_events_total: int = 0
+    threat_feed_latency_ms: float = 0.0
+    simulation_runs_total: int = 0
+    containment_rollbacks_total: int = 0
+    lineage_integrity_failures_total: int = 0
+    threat_feed_staleness_seconds: float = 0.0
+    quarantine_duration_seconds: float = 0.0
+
 class OperationsMetrics(BaseModel):
     incidents_total: int
     active_investigations: int
@@ -272,6 +288,7 @@ class SystemMetricsResponse(BaseModel):
     integrations_metrics: IntegrationsMetrics
     governance_metrics: GovernanceMetrics
     edge_metrics: EdgeMetrics
+    cyber_metrics: CyberMetrics
     remediation: AutonomousRemediationMetrics
     copilot: CopilotMetrics
     operations: OperationsMetrics

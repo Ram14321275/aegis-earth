@@ -130,7 +130,72 @@ async def websocket_topology(websocket: WebSocket):
     """Edge topology and heartbeat updates."""
     # Mapping topology to edge failover/recovery conceptually
     await generic_ws_handler(websocket, default_category=StreamEventType.EDGE_RECOVERY)
+# ==========================================
+# Cyber Defense & Zero-Trust Federation
+# ==========================================
 
+@router.websocket("/ws/cyber")
+async def websocket_cyber_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "cyber")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "cyber")
+
+@router.websocket("/ws/incidents")
+async def websocket_incidents_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "incidents")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "incidents")
+
+@router.websocket("/ws/threats")
+async def websocket_threats_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "threats")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "threats")
+
+@router.websocket("/ws/containment")
+async def websocket_containment_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "containment")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "containment")
+
+@router.websocket("/ws/quarantine")
+async def websocket_quarantine_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "quarantine")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "quarantine")
+
+@router.websocket("/ws/forensics")
+async def websocket_forensics_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "forensics")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "forensics")
+
+@router.websocket("/ws/attestation")
+async def websocket_attestation_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "attestation")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "attestation")
 @ws_router.websocket("/reconciliation")
 async def websocket_reconciliation(websocket: WebSocket):
     """Conflict reconciliation audit trails."""

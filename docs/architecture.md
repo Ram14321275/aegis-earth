@@ -211,3 +211,9 @@ Future disaster intelligence request flow:
 - **Synchronization & Reconciliation Engine**: Synchronizes edge states deterministically. Relies on lineage continuity and strict conflict arbitration (e.g., timestamp comparison) explicitly rejecting lossy operations.
 - **Degraded Operation Mode**: Captures operations safely in `OfflineQueueManager` during network partitions, buffering hazard updates locally until reconnection.
 - **Verifiable Continuity**: Validates historical event chains (`ConsistencyVerifier`) during synchronization preventing orphaned states from propagating globally.
+
+## Autonomous Cyber Defense & Zero-Trust Security Fabric
+- **Deterministic Detection Engine**: Evaluates threat signals (e.g., websocket floods, replay nonces) without opaque ML, yielding explainable reasoning and hashes.
+- **Zero-Trust Identity Fabric**: Discards implicit internal trust. Verifies attestation signatures (HMAC), checking monotonic counters and tracking replay nonces globally.
+- **Autonomous Containment**: Executes strict, reversible remediation automatically (e.g., rate-limiting, edge partition) while isolating enterprise tenant disruption behind an `ApprovalWorkflowEngine` gate.
+- **Forensic Replay & Tamper Traceability**: Links cyber incidents tightly with the governance ledger, rendering attack timelines fully replayable and immutable.

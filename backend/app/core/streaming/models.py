@@ -34,6 +34,17 @@ class StreamEventType(str, Enum):
     CONSISTENCY_VIOLATION = "consistency_violation"
     DEGRADED_MODE = "degraded_mode"
     OFFLINE_RECOVERY = "offline_recovery"
+    CYBER_INCIDENT = "cyber_incident"
+    THREAT_DETECTED = "threat_detected"
+    CONTAINMENT_TRIGGERED = "containment_triggered"
+    QUARANTINE_STARTED = "quarantine_started"
+    ZERO_TRUST_FAILURE = "zero_trust_failure"
+    ATTESTATION_FAILURE = "attestation_failure"
+    REPLAY_ATTACK = "replay_attack"
+    PROVIDER_COMPROMISE = "provider_compromise"
+    THREAT_FEED_UPDATE = "threat_feed_update"
+    FORENSIC_REPLAY = "forensic_replay"
+    CYBER_SIMULATION = "cyber_simulation"
 
 
 class BaseStreamEvent(BaseModel):
