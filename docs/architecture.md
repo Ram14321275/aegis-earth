@@ -203,4 +203,11 @@ Future disaster intelligence request flow:
 - **Human Approval Workflow Layer**: Halts critical destructive or cross-border operations utilizing an asynchronous multi-party approval state machine. Every decision natively merges into the tamper-proof audit chain.
 - **Sovereign Isolation Layer**: Employs string-matching and future `ST_Contains` spatial rules to lock tenant intelligence strictly inside geopolitical bounds, intercepting illegal external deliveries via the `SovereigntyResolver`.
 - **Forensic Replay Engine**: Assembles timeline snapshots and historical audit events to recreate EXACT intelligence states deterministically for any historical timestamp, deliberately ignoring live mutable data models.
-- **Evidence Export Framework**: Asynchronously generates verifiable evidence packages bundling the requested payloads alongside explicit `manifest.json` and lineage signatures for regulatory inspection.
+- **Retention & Compliance Layer**: Facilitates retention logic executing evidence-backed compliance bundle generation. Bypasses naive TTL mechanisms allowing manual and legal-hold archives dynamically.
+
+## Edge Intelligence & Global Synchronization Layer
+- **Distributed Topology & Registry**: Manages `EdgeNode` registration, heartbeat monitoring, and sovereign region mapping to partition workloads correctly across global regions.
+- **Failover & Redis Elections**: Prevents split-brain deployments by using Redis-backed fencing tokens, lease locking (`SET NX PX`), and strict consensus when promoting standby nodes during outages.
+- **Synchronization & Reconciliation Engine**: Synchronizes edge states deterministically. Relies on lineage continuity and strict conflict arbitration (e.g., timestamp comparison) explicitly rejecting lossy operations.
+- **Degraded Operation Mode**: Captures operations safely in `OfflineQueueManager` during network partitions, buffering hazard updates locally until reconnection.
+- **Verifiable Continuity**: Validates historical event chains (`ConsistencyVerifier`) during synchronization preventing orphaned states from propagating globally.

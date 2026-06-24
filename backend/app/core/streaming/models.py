@@ -27,6 +27,13 @@ class StreamEventType(str, Enum):
     COMPLIANCE = "compliance"
     APPROVALS = "approvals"
     REPLAY = "replay"
+    EDGE_FAILOVER = "edge_failover"
+    EDGE_RECOVERY = "edge_recovery"
+    RECONCILIATION_EVENT = "reconciliation_event"
+    SYNC_CHECKPOINT = "sync_checkpoint"
+    CONSISTENCY_VIOLATION = "consistency_violation"
+    DEGRADED_MODE = "degraded_mode"
+    OFFLINE_RECOVERY = "offline_recovery"
 
 
 class BaseStreamEvent(BaseModel):

@@ -31,6 +31,7 @@ from app.schemas.observability import (
     OperationsMetrics,
     IntegrationsMetrics,
     GovernanceMetrics,
+    EdgeMetrics,
 )
 
 
@@ -272,6 +273,21 @@ class MetricsStore:
             "retention_archives_total": 0,
             "lineage_verification_failures_total": 0,
             "replay_reconstruction_duration_ms": 0.0
+        }
+
+        # Edge
+        self.edge_metrics: Dict[str, Any] = {
+            "edge_nodes_total": 0,
+            "synchronization_sessions_total": 0,
+            "reconciliation_conflicts_total": 0,
+            "offline_queue_depth": 0,
+            "degraded_mode_activations_total": 0,
+            "failover_events_total": 0,
+            "recovery_sessions_total": 0,
+            "split_brain_preventions_total": 0,
+            "lineage_divergence_total": 0,
+            "replication_latency_ms": 0.0,
+            "consistency_violations_total": 0
         }
 
         self._metrics_lock = threading.Lock()
@@ -645,6 +661,8 @@ class MetricsStore:
                 self.operations_metrics[metric_name] += value
             elif metric_name in self.integrations_metrics:
                 self.integrations_metrics[metric_name] += value
+            elif metric_name in self.edge_metrics:
+                self.edge_metrics[metric_name] += value
 
     def record_integrations_action(self, action: str):
         with self._metrics_lock:
@@ -655,6 +673,11 @@ class MetricsStore:
         with self._metrics_lock:
             if action in self.governance_metrics:
                 self.governance_metrics[action] += value
+
+    def record_edge_action(self, action: str, value: float = 1.0):
+        with self._metrics_lock:
+            if action in self.edge_metrics:
+                self.edge_metrics[action] += value
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:

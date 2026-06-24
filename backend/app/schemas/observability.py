@@ -207,6 +207,19 @@ class GovernanceMetrics(BaseModel):
     lineage_verification_failures_total: int = 0
     replay_reconstruction_duration_ms: float = 0.0
 
+class EdgeMetrics(BaseModel):
+    edge_nodes_total: int = 0
+    synchronization_sessions_total: int = 0
+    reconciliation_conflicts_total: int = 0
+    offline_queue_depth: int = 0
+    degraded_mode_activations_total: int = 0
+    failover_events_total: int = 0
+    recovery_sessions_total: int = 0
+    split_brain_preventions_total: int = 0
+    lineage_divergence_total: int = 0
+    replication_latency_ms: float = 0.0
+    consistency_violations_total: int = 0
+
 class OperationsMetrics(BaseModel):
     incidents_total: int
     active_investigations: int
@@ -258,6 +271,7 @@ class SystemMetricsResponse(BaseModel):
     copilot_metrics: CopilotMetrics
     integrations_metrics: IntegrationsMetrics
     governance_metrics: GovernanceMetrics
+    edge_metrics: EdgeMetrics
     remediation: AutonomousRemediationMetrics
     copilot: CopilotMetrics
     operations: OperationsMetrics

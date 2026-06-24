@@ -109,4 +109,37 @@ async def websocket_replay(websocket: WebSocket):
     """Replay session streaming."""
     await generic_ws_handler(websocket, default_category=StreamEventType.REPLAY)
 
+@ws_router.websocket("/edge")
+async def websocket_edge(websocket: WebSocket):
+    """General edge operations streaming."""
+    # Mapping to a catch-all edge type for general updates, or DEGRADED_MODE
+    await generic_ws_handler(websocket, default_category=StreamEventType.DEGRADED_MODE)
+
+@ws_router.websocket("/synchronization")
+async def websocket_synchronization(websocket: WebSocket):
+    """Edge synchronization status and checkpoints."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.SYNC_CHECKPOINT)
+
+@ws_router.websocket("/failover")
+async def websocket_failover(websocket: WebSocket):
+    """Failover and election events."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.EDGE_FAILOVER)
+
+@ws_router.websocket("/topology")
+async def websocket_topology(websocket: WebSocket):
+    """Edge topology and heartbeat updates."""
+    # Mapping topology to edge failover/recovery conceptually
+    await generic_ws_handler(websocket, default_category=StreamEventType.EDGE_RECOVERY)
+
+@ws_router.websocket("/reconciliation")
+async def websocket_reconciliation(websocket: WebSocket):
+    """Conflict reconciliation audit trails."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.RECONCILIATION_EVENT)
+
+@ws_router.websocket("/recovery")
+async def websocket_edge_recovery(websocket: WebSocket):
+    """Offline node recovery updates."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.OFFLINE_RECOVERY)
+
+
 

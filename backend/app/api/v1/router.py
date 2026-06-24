@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.v1.routes.geospatial import router as geospatial_router
-from app.api.v1.routes import search, system, jobs, analysis, tiles, command_center, predictive, copilot, operations, integrations, governance
+from app.api.v1.routes import search, system, jobs, analysis, tiles, command_center, predictive, copilot, operations, integrations, governance, edge
 from app.gateway.router import router as gateway_router
 
 
@@ -22,3 +22,4 @@ api_v1_router.include_router(copilot.router)
 api_v1_router.include_router(operations.router)
 api_v1_router.include_router(integrations.router)
 api_v1_router.include_router(governance.router)
+api_v1_router.include_router(edge.router)
