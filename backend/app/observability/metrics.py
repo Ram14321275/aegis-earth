@@ -34,6 +34,7 @@ from app.schemas.observability import (
     EdgeMetrics,
     CyberMetrics,
     ResilienceMetrics,
+    EconomicMetrics,
 )
 
 
@@ -319,6 +320,18 @@ class MetricsStore:
             "replay_verification_failures_total": 0,
             "restoration_aborts_total": 0,
             "mesh_survivability_score": 100.0
+        }
+
+        # Economics
+        self.economic_metrics: Dict[str, Any] = {
+            "resource_shortages_total": 0,
+            "routing_failures_total": 0,
+            "stabilization_activations_total": 0,
+            "market_instability_events_total": 0,
+            "disruption_propagation_depth": 0,
+            "logistics_congestion_score": 0.0,
+            "allocation_approvals_total": 0,
+            "sovereign_trade_violations_total": 0
         }
 
         self._metrics_lock = threading.Lock()
@@ -698,6 +711,8 @@ class MetricsStore:
                 self.cyber_metrics[metric_name] += value
             elif metric_name in self.resilience_metrics:
                 self.resilience_metrics[metric_name] += value
+            elif metric_name in self.economic_metrics:
+                self.economic_metrics[metric_name] += value
 
     def record_integrations_action(self, action: str):
         with self._metrics_lock:
@@ -723,6 +738,11 @@ class MetricsStore:
         with self._metrics_lock:
             if action in self.resilience_metrics:
                 self.resilience_metrics[action] += value
+
+    def record_economic_action(self, action: str, value: float = 1.0):
+        with self._metrics_lock:
+            if action in self.economic_metrics:
+                self.economic_metrics[action] += value
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:

@@ -245,6 +245,16 @@ class ResilienceMetrics(BaseModel):
     restoration_aborts_total: int = 0
     mesh_survivability_score: float = 100.0
 
+class EconomicMetrics(BaseModel):
+    resource_shortages_total: int = 0
+    routing_failures_total: int = 0
+    stabilization_activations_total: int = 0
+    market_instability_events_total: int = 0
+    disruption_propagation_depth: int = 0
+    logistics_congestion_score: float = 0.0
+    allocation_approvals_total: int = 0
+    sovereign_trade_violations_total: int = 0
+
 class OperationsMetrics(BaseModel):
     incidents_total: int
     active_investigations: int
@@ -299,6 +309,7 @@ class SystemMetricsResponse(BaseModel):
     edge_metrics: EdgeMetrics
     cyber_metrics: CyberMetrics
     resilience_metrics: ResilienceMetrics
+    economic_metrics: EconomicMetrics
     remediation: AutonomousRemediationMetrics
     copilot: CopilotMetrics
     operations: OperationsMetrics

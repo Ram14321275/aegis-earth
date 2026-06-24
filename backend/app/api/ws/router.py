@@ -263,6 +263,82 @@ async def websocket_degradation_endpoint(websocket: WebSocket):
             await asyncio.sleep(1)
     except WebSocketDisconnect:
         manager.disconnect(websocket, "degradation")
+
+# ==========================================
+# Autonomous Economic & Resource Stability
+# ==========================================
+
+@router.websocket("/ws/economics")
+async def websocket_economics_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "economics")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "economics")
+
+@router.websocket("/ws/logistics")
+async def websocket_logistics_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "logistics")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "logistics")
+
+@router.websocket("/ws/forecasting")
+async def websocket_forecasting_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "forecasting")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "forecasting")
+
+@router.websocket("/ws/disruptions")
+async def websocket_disruptions_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "disruptions")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "disruptions")
+
+@router.websocket("/ws/markets")
+async def websocket_markets_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "markets")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "markets")
+
+@router.websocket("/ws/stabilization")
+async def websocket_stabilization_econ_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "stabilization_econ")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "stabilization_econ")
+
+@router.websocket("/ws/trade")
+async def websocket_trade_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "trade")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "trade")
+
+@router.websocket("/ws/resources")
+async def websocket_resources_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, "resources")
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, "resources")
 @ws_router.websocket("/reconciliation")
 async def websocket_reconciliation(websocket: WebSocket):
     """Conflict reconciliation audit trails."""

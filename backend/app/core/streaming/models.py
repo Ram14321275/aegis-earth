@@ -55,6 +55,16 @@ class StreamEventType(str, Enum):
     MESH_PARTITION = "mesh_partition"
     SIMULATION_COMPLETED = "simulation_completed"
     RECOVERY_ABORTED = "recovery_aborted"
+    RESOURCE_SHORTAGE = "resource_shortage"
+    LOGISTICS_DISRUPTION = "logistics_disruption"
+    MARKET_INSTABILITY = "market_instability"
+    TRADE_RESTRICTION = "trade_restriction"
+    STRATEGIC_RESERVE_TRIGGERED = "strategic_reserve_triggered"
+    ECONOMIC_COLLAPSE_WARNING = "economic_collapse_warning"
+    SUPPLY_CHAIN_RECOVERY = "supply_chain_recovery"
+    RESOURCE_REALLOCATION = "resource_reallocation"
+    INFRASTRUCTURE_SCARCITY = "infrastructure_scarcity"
+    MARKET_STABILIZATION = "market_stabilization"
 
 class BaseStreamEvent(BaseModel):
     """
