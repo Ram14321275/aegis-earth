@@ -1,5 +1,5 @@
 import threading
-from typing import Dict
+from typing import Dict, Any
 
 from app.schemas.observability import (
     AlertMetrics,
@@ -30,6 +30,7 @@ from app.schemas.observability import (
     CopilotMetrics,
     OperationsMetrics,
     IntegrationsMetrics,
+    GovernanceMetrics,
 )
 
 
@@ -248,7 +249,7 @@ class MetricsStore:
         }
 
         # Integrations
-        self.integrations_metrics = {
+        self.integrations_metrics: Dict[str, Any] = {
             "provider_requests_total": 0,
             "provider_failures_total": 0,
             "ingestion_events_total": 0,
@@ -258,6 +259,19 @@ class MetricsStore:
             "interoperability_exports_total": 0,
             "humanitarian_requests_total": 0,
             "replay_reconstructions_total": 0
+        }
+
+        # Governance
+        self.governance_metrics: Dict[str, Any] = {
+            "audit_events_total": 0,
+            "approval_requests_total": 0,
+            "replay_sessions_total": 0,
+            "governance_policy_violations_total": 0,
+            "sovereignty_blocked_operations_total": 0,
+            "compliance_exports_total": 0,
+            "retention_archives_total": 0,
+            "lineage_verification_failures_total": 0,
+            "replay_reconstruction_duration_ms": 0.0
         }
 
         self._metrics_lock = threading.Lock()
@@ -631,6 +645,16 @@ class MetricsStore:
                 self.operations_metrics[metric_name] += value
             elif metric_name in self.integrations_metrics:
                 self.integrations_metrics[metric_name] += value
+
+    def record_integrations_action(self, action: str):
+        with self._metrics_lock:
+            if action in self.integrations_metrics:
+                self.integrations_metrics[action] += 1
+
+    def record_governance_action(self, action: str, value: float = 1.0):
+        with self._metrics_lock:
+            if action in self.governance_metrics:
+                self.governance_metrics[action] += value
 
     def get_metrics(self) -> SystemMetricsResponse:
         with self._metrics_lock:

@@ -191,18 +191,21 @@ class AutonomousRemediationMetrics(BaseModel):
 
 
 class CopilotMetrics(BaseModel):
-    degraded_reasoning_total: int
-    explainability_validation_failures: int
-    mission_memory_evictions: int
-    copilot_stream_backpressure_total: int
-    recommendation_generation_total: int
-    governance_rejections_total: int
-    copilot_narratives_generated_total: int
-    copilot_degraded_responses_total: int
-    recommendation_blocked_total: int
-    narrative_generation_duration_ms: float
-    mission_context_assembly_duration_ms: float
-    explainability_fallback_total: int
+    generation_requests_total: int = 0
+    governance_rejections_total: int = 0
+    memory_evictions_total: int = 0
+    average_generation_latency_ms: float = 0.0
+
+class GovernanceMetrics(BaseModel):
+    audit_events_total: int = 0
+    approval_requests_total: int = 0
+    replay_sessions_total: int = 0
+    governance_policy_violations_total: int = 0
+    sovereignty_blocked_operations_total: int = 0
+    compliance_exports_total: int = 0
+    retention_archives_total: int = 0
+    lineage_verification_failures_total: int = 0
+    replay_reconstruction_duration_ms: float = 0.0
 
 class OperationsMetrics(BaseModel):
     incidents_total: int
@@ -251,6 +254,10 @@ class SystemMetricsResponse(BaseModel):
     command_center: CommandCenterMetrics
     predictive: PredictiveMetrics
     infrastructure_prediction: InfrastructurePredictionMetrics
+    predictive_metrics: PredictiveMetrics
+    copilot_metrics: CopilotMetrics
+    integrations_metrics: IntegrationsMetrics
+    governance_metrics: GovernanceMetrics
     remediation: AutonomousRemediationMetrics
     copilot: CopilotMetrics
     operations: OperationsMetrics

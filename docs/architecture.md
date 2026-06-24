@@ -196,3 +196,11 @@ Future disaster intelligence request flow:
 - **Webhook Security Gateway**: Intercepts all inbound vendor webhooks via strict HMAC signature verification, nonce validation, and payload timestamp validation to explicitly thwart replay and impersonation attacks.
 - **Explainable Humanitarian Coordination**: Handles external NGO resource and shelter routing requests by applying strict deterministic, explainable prioritization rankings. Completely bans opaque black-box AI from autonomous operational logic.
 - **Secure Export Engine**: Transpiles immutable canonical states into standard distribution formats (CAP 1.2, GeoJSON) securely, strictly preserving timeline lineage and confidence while preserving tenant isolation.
+
+## Sovereign Intelligence Governance, Compliance & Forensic Audit Layer
+- **Immutable Forensic Audit Engine**: Cryptographically signs and chains every critical operation (escalations, generation, overrides) using `HMAC-SHA256` preserving unbroken `lineage_path`s. Reordering or mutation invalidates the sequence entirely.
+- **Deterministic Governance Policies**: Enforces strict operator overrides, sovereign boundary protections, and regional sharing logic synchronously without utilizing opaque black-box AI.
+- **Human Approval Workflow Layer**: Halts critical destructive or cross-border operations utilizing an asynchronous multi-party approval state machine. Every decision natively merges into the tamper-proof audit chain.
+- **Sovereign Isolation Layer**: Employs string-matching and future `ST_Contains` spatial rules to lock tenant intelligence strictly inside geopolitical bounds, intercepting illegal external deliveries via the `SovereigntyResolver`.
+- **Forensic Replay Engine**: Assembles timeline snapshots and historical audit events to recreate EXACT intelligence states deterministically for any historical timestamp, deliberately ignoring live mutable data models.
+- **Evidence Export Framework**: Asynchronously generates verifiable evidence packages bundling the requested payloads alongside explicit `manifest.json` and lineage signatures for regulatory inspection.

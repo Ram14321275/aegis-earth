@@ -84,3 +84,29 @@ async def websocket_distribution(websocket: WebSocket):
     """
     await generic_ws_handler(websocket, default_category=StreamEventType.DISTRIBUTION)
 
+@ws_router.websocket("/governance")
+async def websocket_governance(websocket: WebSocket):
+    """Governance policies and violation updates."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.GOVERNANCE)
+
+@ws_router.websocket("/audit")
+async def websocket_audit(websocket: WebSocket):
+    """Audit chain streaming."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.AUDIT)
+
+@ws_router.websocket("/compliance")
+async def websocket_compliance(websocket: WebSocket):
+    """Compliance export status."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.COMPLIANCE)
+
+@ws_router.websocket("/approvals")
+async def websocket_approvals(websocket: WebSocket):
+    """Approval workflow updates."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.APPROVALS)
+
+@ws_router.websocket("/replay")
+async def websocket_replay(websocket: WebSocket):
+    """Replay session streaming."""
+    await generic_ws_handler(websocket, default_category=StreamEventType.REPLAY)
+
+

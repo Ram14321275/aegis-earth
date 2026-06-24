@@ -22,6 +22,11 @@ class StreamEventType(str, Enum):
     INTEGRATIONS = "integrations"
     HUMANITARIAN = "humanitarian"
     DISTRIBUTION = "distribution"
+    GOVERNANCE = "governance"
+    AUDIT = "audit"
+    COMPLIANCE = "compliance"
+    APPROVALS = "approvals"
+    REPLAY = "replay"
 
 
 class BaseStreamEvent(BaseModel):
